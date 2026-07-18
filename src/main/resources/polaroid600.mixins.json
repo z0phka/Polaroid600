@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "net.sophka.polaroid.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "refmap": "polaroid600.refmap.json",
+  "mixins": [],
+  "client": [
+    "MixinItemInHandRenderer",
+    "MixinArmedEntityRenderState",
+    "MixinLevelRenderer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

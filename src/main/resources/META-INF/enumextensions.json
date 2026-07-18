@@ -1,0 +1,51 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "POLAROID600_SELFIE_BOTH_POSE",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "net/sophka/polaroid/client/model/ModArmPose",
+        "field": "SELFIE_BOTH_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "POLAROID600_SELFIE_LEFT_POSE",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "net/sophka/polaroid/client/model/ModArmPose",
+        "field": "SELFIE_LEFT_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+      "name": "POLAROID600_SELFIE_RIGHT_POSE",
+      "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+      "parameters": {
+        "class": "net/sophka/polaroid/client/model/ModArmPose",
+        "field": "SELFIE_RIGHT_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "POLAROID600_SELFIE_MODE_THIRD_PERSON",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": [
+        -1,
+        "polaroid600:selfie_mode_third_person",
+        "THIRD_PERSON_RIGHT_HAND"
+      ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "POLAROID600_SELFIE_MODE_FIRST_PERSON",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": [
+        -1,
+        "polaroid600:selfie_mode_first_person",
+        "FIRST_PERSON_RIGHT_HAND"
+      ]
+    }
+  ]
+}

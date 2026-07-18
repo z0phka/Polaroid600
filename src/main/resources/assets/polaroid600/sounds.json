@@ -1,0 +1,8 @@
+{
+  "camera.shutter":{
+    "subtitle":"subtitle.camera.shutter",
+    "sounds": [
+      "polaroid600:camera.shutter"
+    ]
+  }
+}

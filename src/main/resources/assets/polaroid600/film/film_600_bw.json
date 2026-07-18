@@ -1,0 +1,43 @@
+{
+  "format" : "600",
+  "transformations" : [
+    {
+      "type" : "polaroid600:grain",
+      "strength" : 0.03125
+    },
+    {
+      "type" : "polaroid600:aberration",
+      "xScaleRed" : 8,
+      "yScaleRed" : 8,
+      "xScaleGreen" : 4,
+      "yScaleGreen" : 4,
+      "red" : 1,
+      "green" : 0.5
+    },
+    {
+      "type" : "polaroid600:power_color",
+      "red" : 1.75,
+      "green" : 1.75,
+      "blue" : 1.75
+    },
+    {
+      "type" : "polaroid600:halation"
+    },
+    {
+      "type" : "polaroid600:quantization",
+      "red" : 48,
+      "green" : 32,
+      "blue" : 16
+    },
+    {
+      "type" : "polaroid600:linear_combination",
+      "red" : 0.2126,
+      "green" : 0.7152,
+      "blue" : 0.0722
+    },
+    {
+      "type" : "polaroid600:vignette",
+      "strength" : 0.25
+    }
+  ]
+}

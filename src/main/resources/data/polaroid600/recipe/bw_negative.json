@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": "minecraft:resin_brick",
+    "L": "polaroid600:light_sensitive_layer"
+  },
+  "pattern": [
+    "LLL",
+    " R "
+  ],
+  "result": {
+    "id": "polaroid600:bw_negative",
+    "count": 3
+  }
+}

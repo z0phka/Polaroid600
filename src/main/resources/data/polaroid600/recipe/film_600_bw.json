@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "polaroid600:bw_negative",
+    "polaroid600:bw_reagent",
+    "minecraft:glass_pane"
+  ],
+  "result": {
+    "id": "polaroid600:film_600_bw"
+  }
+}

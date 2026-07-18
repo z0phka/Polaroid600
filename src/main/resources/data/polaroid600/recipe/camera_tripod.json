@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "minecraft:lever"
+
+  },
+  "pattern": [
+    "LI ",
+    " I ",
+    "I I"
+  ],
+  "result": {
+    "id": "polaroid600:camera_tripod"
+  }
+}

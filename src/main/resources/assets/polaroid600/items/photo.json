@@ -1,0 +1,47 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo_600_color"
+        },
+        "when": "color"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo_600_bw"
+        },
+        "when": "bw"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo_600_blue"
+        },
+        "when": "blue"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo_600_green"
+        },
+        "when": "green"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo_600_purple"
+        },
+        "when": "purple"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "polaroid600:item/photo"
+    },
+    "property": "polaroid600:film_type"
+  }
+}
