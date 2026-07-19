@@ -42,6 +42,10 @@ public class PhotoRenderer {
             74, 75, 4, 4, 6, 17
     );
 
+    public static final Frame GO = Frame.create(
+            Identifier.fromNamespaceAndPath(Polaroid600.MODID, "textures/photo/go_frame.png"),
+            39, 47, 3, 3, 3, 11
+    );
 
     public static final Style FONT = Style.EMPTY.withFont(new FontDescription.Resource(Identifier.fromNamespaceAndPath(Polaroid600.MODID, "marker")));
 
@@ -55,6 +59,7 @@ public class PhotoRenderer {
 
     public static Frame frame(FilmFormat format) {
         return switch (format) {
+            case _GO -> GO;
             case _600 -> _600;
             case _1200 -> _1200;
             default -> _600;

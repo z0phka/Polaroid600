@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "polaroid600:item/camera_go"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "polaroid600:item/camera_go",
+        "model": {
+          "type": "polaroid600:selfie_mirror",
+          "top_left" : [7.2, 2.9, 5.45],
+          "bottom_right": [6, 1.7, 5.45]
+        }
+      }
+    ]
+  }
+}

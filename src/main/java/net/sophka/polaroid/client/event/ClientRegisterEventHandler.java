@@ -16,6 +16,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.ClientState;
+import net.sophka.polaroid.client.gui.layers.DebugLayer;
 import net.sophka.polaroid.client.gui.screens.CameraFilmTooltipComponent;
 import net.sophka.polaroid.client.init.ModKeyMappings;
 import net.sophka.polaroid.client.model.FilmTypeProperty;
@@ -24,6 +25,7 @@ import net.sophka.polaroid.client.model.ModModelProvider;
 import net.sophka.polaroid.client.model.entity.CameraTripodModel;
 import net.sophka.polaroid.client.renderer.entity.CameraTripodRenderer;
 import net.sophka.polaroid.client.renderer.level.block.PhotoBlockEntityRenderer;
+import net.sophka.polaroid.client.renderer.level.item.SelfieMirrorRenderer;
 import net.sophka.polaroid.init.ModBlockEntityTypes;
 import net.sophka.polaroid.init.ModEntityTypes;
 import net.sophka.polaroid.init.ModItems;
@@ -94,5 +96,18 @@ public class ClientRegisterEventHandler {
     @SubscribeEvent
     public static void registerClientTooltipComponentFactories(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(CameraFilmTooltipComponent.DataComponent.class, CameraFilmTooltipComponent::create);
+    }
+
+    @SubscribeEvent
+    public static void registerGuiLayers(RegisterGuiLayersEvent event){
+        event.registerAboveAll(Identifier.fromNamespaceAndPath(Polaroid600.MODID, "debug"), new DebugLayer());
+    }
+
+    @SubscribeEvent
+    public static void registerSpecialRenderers(RegisterSpecialModelRendererEvent event) {
+        event.register(
+                Identifier.fromNamespaceAndPath(Polaroid600.MODID, "selfie_mirror"),
+                SelfieMirrorRenderer.Unbaked.MAP_CODEC
+        );
     }
 }

@@ -24,6 +24,8 @@ import net.sophka.polaroid.server.photo.ServerPhotoTaker;
 import net.sophka.polaroid.world.item.component.CameraFilm;
 
 public class CameraItem extends Item {
+
+    //TODO: Idk, maybe add a builder to this or something to keep it final
     public static class CameraProperties{
         public enum FlashMode{
             NEVER,
@@ -35,6 +37,7 @@ public class CameraItem extends Item {
         private boolean doubleExposure;
         private boolean AF;
         private boolean timer;
+        private boolean selfieMirror;
         private FlashMode flashMode = FlashMode.NEVER;
 
         public CameraProperties withFOV(float fov){
@@ -74,6 +77,15 @@ public class CameraItem extends Item {
             return this;
         }
 
+        public CameraProperties withSelfieMirror(){
+            return withSelfieMirror(true);
+        }
+
+        public CameraProperties withSelfieMirror(boolean selfieMirror){
+            this.selfieMirror = selfieMirror;
+            return this;
+        }
+
         public float getFov() {
             return fov;
         }
@@ -96,6 +108,10 @@ public class CameraItem extends Item {
 
         public FlashMode getFlashMode() {
             return this.flashMode;
+        }
+
+        public boolean hasSelfieMirror(){
+            return this.selfieMirror;
         }
     }
 
@@ -214,6 +230,10 @@ public class CameraItem extends Item {
 
     public float getFov(){
         return this.cameraProperties.getFov();
+    }
+
+    public boolean twoHanded(){
+        return this.cameraProperties.filmFormat.twoHanded();
     }
 
     public boolean canShoot(ItemStack cameraStack) {

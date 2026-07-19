@@ -54,6 +54,7 @@ public class ModClientEventHandler {
     @SubscribeEvent
     public static void onRenderPost(RenderFrameEvent.Post event){
         ClientPhotoTaker.instance().process();
+        ClientState.renderSelfieMirrorPass();
     }
 
     @SubscribeEvent
@@ -101,6 +102,7 @@ public class ModClientEventHandler {
         if(player == null){
             return;
         }
+        ClientState.update();
         if(!(player.getActiveItem().getItem() instanceof CameraItem) || (!player.getMainHandItem().isEmpty() && !player.getOffhandItem().isEmpty())){
             ClientState.selfieMode = false;
         }
@@ -134,6 +136,5 @@ public class ModClientEventHandler {
             }
         }
     }
-
 
 }

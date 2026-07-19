@@ -1,5 +1,6 @@
 package net.sophka.polaroid;
 
+import net.sophka.polaroid.config.ClientConfig;
 import net.sophka.polaroid.config.CommonConfig;
 import net.sophka.polaroid.config.ServerConfig;
 import net.sophka.polaroid.init.*;
@@ -31,6 +32,7 @@ public class Polaroid600 {
 
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

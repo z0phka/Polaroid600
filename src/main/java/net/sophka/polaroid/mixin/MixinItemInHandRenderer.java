@@ -11,6 +11,7 @@ import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.renderer.CameraInHandRenderer;
 import net.sophka.polaroid.client.renderer.PhotoInHandRenderer;
 import net.sophka.polaroid.world.item.CameraItem;
+import net.sophka.polaroid.world.item.FilmFormat;
 import net.sophka.polaroid.world.item.PhotoItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -51,9 +52,15 @@ public abstract class MixinItemInHandRenderer {
             poseStack.pushPose();
             ci.cancel();
         }
-        else if (itemStack.getItem() instanceof CameraItem && ClientState.selfieMode){
-            if (isMainHand && this.offHandItem.isEmpty()) {
-                cameraInHandRenderer.renderTwoHandedCamera(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
+        else if (itemStack.getItem() instanceof CameraItem cameraItem && ClientState.selfieMode){
+            if(cameraItem.twoHanded()){
+                if (isMainHand && this.offHandItem.isEmpty()) {
+                    cameraInHandRenderer.renderTwoHandedCamera(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
+                }
+            }
+            else{
+
+                cameraInHandRenderer.renderOneHandedCamera(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, arm, attack, itemStack);
             }
             poseStack.pushPose();
             ci.cancel();

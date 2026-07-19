@@ -14,7 +14,7 @@ public enum FilmFormat implements StringRepresentable {
     MISSING(0,"missing", 0,0),
     _600(1,"600",512,512),
     _SX_70(2,"sx-70",512,512),
-    _GO(3,"go",512,512),
+    _GO(3,"go",302,302),
     _1200(4,"1200",604,476),
     _20x24(5,"20x24",512,512);
 
@@ -50,5 +50,9 @@ public enum FilmFormat implements StringRepresentable {
     @Override
     public @NotNull String getSerializedName() {
         return this.name;
+    }
+
+    public boolean twoHanded(){
+        return this != _GO;
     }
 }

@@ -22,7 +22,7 @@ public class MixinArmedEntityRenderState {
         HumanoidArm arm = state.attackArm;
         ItemStack stack = entity.getItemHeldByArm(arm);
         if(stack.getItem() instanceof CameraItem && ClientState.selfieMode){
-            if(entity == Minecraft.getInstance().player && ClientPhotoTaker.instance().getState() == ClientPhotoTaker.State.TAKING_PHOTO){
+            if(entity == Minecraft.getInstance().player && ClientState.isSelfieCameraPass()){
                 stack = ItemStack.EMPTY;
             }
             itemModelResolver.updateForLiving(arm == HumanoidArm.LEFT ? state.leftHandItemState : state.rightHandItemState, stack, ModItemDisplayContexts.selfieModeThirdPerson(), entity);

@@ -44,24 +44,35 @@ public class PhotoInHandRenderer {
         }
 
         poseStack.pushPose();
-        poseStack.translate(invert * 0.625F, -0.14F + inverseArmHeight * -1.2F, -0.95F);
-        if(arm == HumanoidArm.LEFT){
-            poseStack.translate(-10.752f/100f * 2.275,0,0);
-        }
-        float sqrtAttackValue = Mth.sqrt(attackValue);
-        float xSwing = Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
-        float xSwingPosition = -0.5F * xSwing;
-        float ySwingPosition = 0.4F * Mth.sin((double)(sqrtAttackValue * ((float)Math.PI * 2F)));
-        float zSwingPosition = -0.3F * Mth.sin((double)(attackValue * (float)Math.PI));
-        poseStack.translate(invert * xSwingPosition, ySwingPosition - 0.3F * xSwing, zSwingPosition);
-        poseStack.mulPose(Axis.XP.rotationDegrees(xSwing * -45.0F));
-        poseStack.mulPose(Axis.YP.rotationDegrees(invert * xSwing * -30.0F));
-        photoRenderer.renderPhoto(poseStack, submitNodeCollector, lightCoords, photo);
+        PhotoCache.getInstance().get(photo.getOrDefault(ModDataComponents.PHOTO,"")).ifPresent(data ->
+        {
+
+            FilmFormat format = photo.getOrDefault(ModDataComponents.FILM_FORMAT, data.format());
+            PhotoRenderer.Frame frame = PhotoRenderer.frame(format);
+            PhotoRenderer.Frame _600 = PhotoRenderer._600;
+
+            float scale = 0.00390625f;
+
+            poseStack.translate(-scale * frame.frameWidth()/2f,0,0);
+            poseStack.translate(invert * 0.625F, -0.14F + inverseArmHeight * -1.2F, -0.95F);
+            float sqrtAttackValue = Mth.sqrt(attackValue);
+            float xSwing = Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+            float xSwingPosition = -0.5F * xSwing;
+            float ySwingPosition = 0.4F * Mth.sin((double)(sqrtAttackValue * ((float)Math.PI * 2F)));
+            float zSwingPosition = -0.3F * Mth.sin((double)(attackValue * (float)Math.PI));
+
+            poseStack.translate(invert * xSwingPosition, ySwingPosition - 0.3F * xSwing, zSwingPosition);
+            poseStack.mulPose(Axis.XP.rotationDegrees(xSwing * -45.0F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(invert * xSwing * -30.0F));
+            poseStack.translate(invert * scale * frame.frameWidth() * (_600.frameWidth() / (float)frame.frameWidth()), 1.5 * 0.1875F * (frame.frameHeight() - _600.frameHeight()) / (float)_600.frameHeight() , -0.15f);
+
+            photoRenderer.renderPhoto(poseStack, submitNodeCollector, lightCoords, photo);
+        });
         poseStack.popPose();
     }
 
     public float calculateTilt(float xRot) {
-       return 0;
+        return 0;
     }
 
     public void renderHand(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, HumanoidArm arm) {
@@ -110,7 +121,8 @@ public class PhotoInHandRenderer {
 
             float xzSwingRotation = Mth.sin((double) (sqrtAttackValue * (float) Math.PI));
             poseStack.mulPose(Axis.XP.rotationDegrees(xzSwingRotation * 20.0F));
-            poseStack.translate(-0.1875F * (frame.frameWidth() / 64f), 0, -0.15f);
+            PhotoRenderer.Frame _600 = PhotoRenderer._600;
+            poseStack.translate(-0.1875F * (frame.frameWidth() / (float)_600.frameWidth()), 2 * 0.1875F * (frame.frameHeight() - _600.frameHeight()) / (float)_600.frameHeight() , -0.15f);
             poseStack.scale(1.5F, 1.5F, 1.5F);
 
             photoRenderer.renderPhoto(poseStack, submitNodeCollector, lightCoords, photo);

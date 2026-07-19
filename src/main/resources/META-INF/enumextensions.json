@@ -39,12 +39,32 @@
     },
     {
       "enum": "net/minecraft/world/item/ItemDisplayContext",
-      "name": "POLAROID600_SELFIE_MODE_FIRST_PERSON",
+      "name": "POLAROID600_SELFIE_MODE_FIRST_PERSON_BOTH",
       "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
       "parameters": [
         -1,
         "polaroid600:selfie_mode_first_person",
         "FIRST_PERSON_RIGHT_HAND"
+      ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "POLAROID600_SELFIE_MODE_FIRST_PERSON_LEFT",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": [
+        -1,
+        "polaroid600:selfie_mode_first_person_left",
+        "POLAROID600_SELFIE_MODE_FIRST_PERSON_BOTH"
+      ]
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "POLAROID600_SELFIE_MODE_FIRST_PERSON_RIGHT",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": [
+        -1,
+        "polaroid600:selfie_mode_first_person_right",
+        "POLAROID600_SELFIE_MODE_FIRST_PERSON_BOTH"
       ]
     }
   ]

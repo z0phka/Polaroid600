@@ -160,6 +160,7 @@ public class ClientPhotoTaker {
         return dst;
     }
 
+    //TODO: Fix LevelToTargetRenderer and switch to using it
     private void processScheduledPhoto(ScheduledPhoto scheduledPhoto) {
         if (this.minecraft.levelExtractor.countRenderedSections() > 10 && this.minecraft.levelRenderer.hasRenderedAllSections()) {
             ItemStack cameraStack = scheduledPhoto.cameraStack;
@@ -176,8 +177,7 @@ public class ClientPhotoTaker {
             if (scheduledPhoto.cameraViewEntity != null) {
                 cameraViewEntity = scheduledPhoto.cameraViewEntity;
             } else if (selfie) {
-                cameraViewEntity = new CameraViewEntity(minecraft.level);
-                cameraViewEntity.updateForPlayer(minecraft.player);
+                cameraViewEntity = ClientState.selfieViewEntity();
             }
 
             if (cameraViewEntity != null) {
