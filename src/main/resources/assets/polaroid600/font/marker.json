@@ -2,10 +2,10 @@
 	"providers": [
 		{
 			"type": "ttf",
-			"file": "polaroid600:marker.ttf",
+			"file": "polaroid600:permanent-marker.ttf",
 			"shift": [0, 0],
 			"size": 11.0,
-			"oversample": 1.0
+			"oversample": 2
 		}
 	]
 }

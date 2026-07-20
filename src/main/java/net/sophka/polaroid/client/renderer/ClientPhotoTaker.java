@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.ClientState;
@@ -172,6 +173,11 @@ public class ClientPhotoTaker {
             boolean guiHidden = this.minecraft.gui.hud.isHidden();
             Entity cameraEntity = minecraft.getCameraEntity();
             CameraType cameraType = minecraft.options.getCameraType();
+            Camera camera = minecraft.gameRenderer.mainCamera();
+            Vec3 oldCameraPos = camera.position();
+            float oldRotX = camera.xRot();
+            float oldRotY = camera.yRot();
+            float oldRoll = camera.getRoll();
 
             CameraViewEntity cameraViewEntity = null;
             if (scheduledPhoto.cameraViewEntity != null) {
@@ -181,10 +187,10 @@ public class ClientPhotoTaker {
             }
 
             if (cameraViewEntity != null) {
-                minecraft.gameRenderer.mainCamera().setEntity(cameraViewEntity);
-                minecraft.gameRenderer.mainCamera().eyeHeight = cameraViewEntity.getEyeHeight();
-                minecraft.gameRenderer.mainCamera().eyeHeightOld = cameraViewEntity.getEyeHeight();
-                minecraft.gameRenderer.mainCamera().setPosition(cameraViewEntity.getX(), cameraViewEntity.getY(), cameraViewEntity.getZ());
+                camera.setEntity(cameraViewEntity);
+                camera.eyeHeight = cameraViewEntity.getEyeHeight();
+                camera.eyeHeightOld = cameraViewEntity.getEyeHeight();
+                camera.setPosition(cameraViewEntity.getX(), cameraViewEntity.getY(), cameraViewEntity.getZ());
             }
 
             if (!this.minecraft.gui.hud.isHidden()) {
@@ -204,9 +210,11 @@ public class ClientPhotoTaker {
 
 
             if (cameraViewEntity != null) {
-                minecraft.gameRenderer.mainCamera().setEntity(cameraEntity);
-                minecraft.gameRenderer.mainCamera().eyeHeight = cameraEntity.getEyeHeight();
-                minecraft.gameRenderer.mainCamera().eyeHeightOld = cameraEntity.getEyeHeight();
+                camera.setEntity(cameraEntity);
+                camera.eyeHeight = cameraEntity.getEyeHeight();
+                camera.eyeHeightOld = cameraEntity.getEyeHeight();
+                camera.setPosition(oldCameraPos.x, oldCameraPos.y, oldCameraPos.z);
+                camera.setRotation(oldRotY, oldRotX, oldRoll);
             }
 
             processRender(cameraRenderTarget, scheduledPhoto);

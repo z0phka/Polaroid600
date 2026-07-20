@@ -73,7 +73,7 @@
           {
             "name": "APERTURE",
             "type": "float",
-            "value": 7.0
+            "value": 7.5
           },
           {
             "name": "FOCAL_LENGTH",

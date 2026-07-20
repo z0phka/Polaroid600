@@ -17,6 +17,10 @@ public class ClientConfig {
             .comment("How many render ticks between selfie mirror updates.")
             .defineInRange("selfieMirror.period", 20, 1, 20000);
 
+    public static final ModConfigSpec.BooleanValue CUSTOM_MARKER_FONT = BUILDER
+            .comment("Whether should use a non-vanilla marker font for the text on photos.")
+            .define("photo.customMarkerFont", true);
+
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 }

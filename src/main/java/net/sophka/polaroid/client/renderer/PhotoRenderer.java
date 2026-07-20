@@ -12,11 +12,13 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
 import net.sophka.polaroid.Polaroid600;
+import net.sophka.polaroid.config.ClientConfig;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.utils.Utils;
 import net.sophka.polaroid.world.item.FilmFormat;
@@ -51,7 +53,7 @@ public class PhotoRenderer {
 
     private static final Identifier _1x1_RES = Identifier.fromNamespaceAndPath(Polaroid600.MODID, "textures/utils/1x1.png");
     private static final RenderType _1x1_TYPE = RenderTypes.entityTranslucent(_1x1_RES);
-    private Minecraft minecraft;
+    private final Minecraft minecraft;
 
     public PhotoRenderer(Minecraft minecraft) {
         this.minecraft = minecraft;
@@ -81,27 +83,32 @@ public class PhotoRenderer {
             float topMargin = frame.topMargin() * scale;
             float bottomMargin = frame.bottomMargin() * scale;
 
-            graphics.blit(RenderPipelines.GUI_TEXTURED, frame.identifier, (int) (x - frameWidth / 2f), (int) (y - frameHeight / 2f), 0, 0, (int) frameWidth, (int) frameHeight, (int) frameWidth, (int) frameHeight);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, frame.identifier, Math.round(x - frameWidth / 2f), Math.round(y - frameHeight / 2f), 0, 0, (int) frameWidth, (int) frameHeight, (int) frameWidth, (int) frameHeight);
             PhotoCache.PhotoData data = optData.get();
             double progress = PhotoItem.developmentProgress(minecraft.level, itemStack);
             double sunDamage = PhotoItem.sunDamage(minecraft.level, itemStack);
             int value = (int) Math.round(progress * 255);
             int imageColor = ARGB.color(255, value, value, value);
 
-            graphics.blit(RenderPipelines.GUI_TEXTURED, data.texture(), (int) (x + leftMargin - frameWidth / 2f), (int) (y + topMargin - frameHeight / 2f), 0, 0, (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), imageColor);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, data.texture(), Math.round(x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), 0, 0, (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), imageColor);
 
             if (sunDamage > 0) {
                 int damageColor = ARGB.color((int) Math.round(255 * sunDamage), 0xffffff);
-                graphics.fill((int) (x + leftMargin - frameWidth / 2f), (int) (y + topMargin - frameHeight / 2f), (int) (x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), damageColor);
+                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), damageColor);
             }
             if (progress < 1) {
                 int opacifierColor = ARGB.color((int) Math.round(255 * Utils.clampUnit(1 - progress * 1.25)), 84, 169, 229);
-                graphics.fill((int) (x + leftMargin - frameWidth / 2f), (int) (y + topMargin - frameHeight / 2f), (int) (x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), opacifierColor);
+                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), opacifierColor);
             }
 
             if (itemStack.getCustomName() != null) {
-                Component component = Component.literal(itemStack.getCustomName().tryCollapseToString()).setStyle(FONT);
-                graphics.text(minecraft.font, component, x - minecraft.font.width(component) / 2, (int) (y + (frameHeight - topMargin - bottomMargin / 2f) / 2f - 2 * minecraft.font.lineHeight), 0xFF2D2D2D, false);
+                MutableComponent component = Component.literal(itemStack.getCustomName().tryCollapseToString());
+                if(ClientConfig.CUSTOM_MARKER_FONT.get()){
+                    component.setStyle(FONT);
+                }
+                int fontX = x - minecraft.font.width(component) / 2;
+                int fontY = Math.round(y - minecraft.font.lineHeight/2f + frameHeight/2f - bottomMargin/2f);
+                graphics.text(minecraft.font, component, fontX, fontY, 0xFF2D2D2D, false);
             }
         });
     }
@@ -174,8 +181,14 @@ public class PhotoRenderer {
             if (itemStack.getCustomName() != null) {
                 poseStack.translate(0, 0, -0.1F);
                 poseStack.scale(0.4f, 0.4f, 0.4f);
-                Component component = Component.literal(itemStack.getCustomName().tryCollapseToString()).setStyle(FONT);
-                submitNodeCollector.submitText(poseStack, (frameWidth / 2f) * 10 / 4f - minecraft.font.width(component) * 0.5f, (int) (frameHeight - topMargin - bottomMargin / 2f) * 10 / 4f, component.getVisualOrderText(), false, Font.DisplayMode.NORMAL, lightCoords, 0xFF2D2D2D, 0, 0);
+                MutableComponent component = Component.literal(itemStack.getCustomName().tryCollapseToString());
+                if(ClientConfig.CUSTOM_MARKER_FONT.get()){
+                    component.setStyle(FONT);
+                }
+
+                int fontX = Math.round(frameWidth * (10/4f) / 2f - minecraft.font.width(component)/2f);
+                int fontY = Math.round(frameHeight * (10/4f) - minecraft.font.lineHeight/2f - bottomMargin * (10/4f) /2f);
+                submitNodeCollector.submitText(poseStack, fontX, fontY, component.getVisualOrderText(),false, Font.DisplayMode.NORMAL, lightCoords, 0xFF2D2D2D, 0, 0);
             }
         });
     }

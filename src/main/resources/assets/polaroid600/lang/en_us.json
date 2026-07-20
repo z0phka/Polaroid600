@@ -1,6 +1,7 @@
 {
   "itemGroup.polaroid600": "Polaroid 600 Tab",
-  "item.polaroid600.camera_600": "Polaroid 600",
+  "item.polaroid600.camera_600": "Polaroid 635",
+  "item.polaroid600.camera_600_af": "Polaroid 660 AF",
   "item.polaroid600.camera_now": "Polaroid Now",
   "item.polaroid600.camera_spectra": "Polaroid Spectra",
   "item.polaroid600.film_600": "Color 600 film",

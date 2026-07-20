@@ -42,6 +42,10 @@ public class LevelToTargetRenderer {
         Camera camera = minecraft.gameRenderer.mainCamera();
         Vec3 oldCameraPos = camera.position();
 
+        float oldRotX = camera.xRot();
+        float oldRotY = camera.yRot();
+        float oldRoll = camera.getRoll();
+
 
         if (entity != null) {
             camera.setEntity(entity);
@@ -67,7 +71,7 @@ public class LevelToTargetRenderer {
         DeltaTracker deltaTracker = minecraft.getDeltaTracker();
 
         minecraft.gameRenderer.update(DeltaTracker.ONE);
-        minecraft.gameRenderer.extract(deltaTracker, true);
+        minecraft.gameRenderer.extract(DeltaTracker.ONE, true);
         minecraft.gameRenderer.render(deltaTracker, true);
         mainRenderTarget.width = oldWidth;
         mainRenderTarget.height = oldHeight;
@@ -90,6 +94,7 @@ public class LevelToTargetRenderer {
             camera.eyeHeight = cameraEntity.getEyeHeight();
             camera.eyeHeightOld = cameraEntity.getEyeHeight();
             camera.setPosition(oldCameraPos.x, oldCameraPos.y, oldCameraPos.z);
+            camera.setRotation(oldRotY, oldRotX, oldRoll);
         }
     }
 
