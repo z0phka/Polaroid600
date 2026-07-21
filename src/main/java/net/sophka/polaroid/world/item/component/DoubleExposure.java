@@ -26,6 +26,7 @@ public class DoubleExposure {
                     NeoForgeStreamCodecs.enumCodec(State.class),
                     DoubleExposure::getState,
                     DoubleExposure::new);
+
     public enum State implements StringRepresentable {
         OFF("off"),
         ON("on"),
@@ -33,7 +34,7 @@ public class DoubleExposure {
 
         public final String name;
 
-        State(String name){
+        State(String name) {
             this.name = name;
         }
 
@@ -46,12 +47,12 @@ public class DoubleExposure {
     private final State state;
     private final String partialImage;
 
-    public DoubleExposure(String partialImage, State state){
+    public DoubleExposure(String partialImage, State state) {
         this.partialImage = partialImage;
         this.state = state;
     }
 
-    public DoubleExposure(State state){
+    public DoubleExposure(State state) {
         this("", state);
     }
 
@@ -63,11 +64,11 @@ public class DoubleExposure {
         return partialImage;
     }
 
-    public boolean isOn(){
+    public boolean isOn() {
         return getState() != State.OFF;
     }
 
-    public boolean isPrimed(){
+    public boolean isPrimed() {
         return getState() == State.PRIMED;
     }
 
@@ -82,33 +83,33 @@ public class DoubleExposure {
         return Objects.hash(getState(), getPartialImage());
     }
 
-    public static class Mutable{
+    public static class Mutable {
         private State state;
         private String partialImage;
 
-        public Mutable(DoubleExposure doubleExposure){
+        public Mutable(DoubleExposure doubleExposure) {
             this.state = doubleExposure.state;
             this.partialImage = doubleExposure.partialImage;
         }
 
-        public void storePartialImage(String partialImage){
-            if(this.state != State.ON){
+        public void storePartialImage(String partialImage) {
+            if (this.state != State.ON) {
                 return;
             }
             this.state = State.PRIMED;
             this.partialImage = partialImage;
         }
 
-        public void turnOn(){
-            if(this.state != State.OFF){
+        public void turnOn() {
+            if (this.state != State.OFF) {
                 return;
             }
             this.state = State.ON;
         }
 
-        public Optional<String> turnOff(){
+        public Optional<String> turnOff() {
             this.state = State.OFF;
-            if(!Strings.isNullOrEmpty(this.partialImage)){
+            if (!Strings.isNullOrEmpty(this.partialImage)) {
                 String ret = this.partialImage;
                 this.partialImage = "";
                 return Optional.of(ret);
@@ -116,7 +117,7 @@ public class DoubleExposure {
             return Optional.empty();
         }
 
-        public DoubleExposure toImmutable(){
+        public DoubleExposure toImmutable() {
             return new DoubleExposure(this.partialImage, this.state);
         }
     }

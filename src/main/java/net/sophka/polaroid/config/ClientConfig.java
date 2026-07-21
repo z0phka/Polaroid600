@@ -21,6 +21,11 @@ public class ClientConfig {
             .comment("Whether should use a non-vanilla marker font for the text on photos.")
             .define("photo.customMarkerFont", true);
 
+    public static final ModConfigSpec.BooleanValue DARKSLIDES_IN_CREATIVE_TAB = BUILDER
+            .comment("Whether should be darkslides available in the creative tab.")
+            .worldRestart()
+            .define("misc.darkslidesInCreativeTab", false);
+
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 }

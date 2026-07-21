@@ -6,6 +6,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.renderer.PhotoCache;
 import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
+import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.world.entity.CameraViewEntity;
 import net.sophka.polaroid.world.item.FilmFormat;
 
@@ -35,5 +36,9 @@ public class ClientPayloadHandler {
             }
             ClientPhotoTaker.instance().takePhoto(request.camera(), cameraViewEntity, request.token());
         });
+    }
+
+    public static void handleDarkslideSync(final DarkslideSyncPayload darkslideSyncPayload, final IPayloadContext iPayloadContext) {
+        DarkslideManager.CLIENT_INSTANCE.load(darkslideSyncPayload.data());
     }
 }

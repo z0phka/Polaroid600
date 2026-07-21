@@ -1,20 +1,12 @@
 package net.sophka.polaroid.client.renderer.level;
 
-import com.mojang.blaze3d.pipeline.MainTarget;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import net.minecraft.client.*;
-import net.minecraft.client.renderer.CloudRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.client.ClientState;
-import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
-import net.sophka.polaroid.init.ModDataComponents;
-import net.sophka.polaroid.world.entity.CameraViewEntity;
 import org.joml.Matrix4f;
 
 public class LevelToTargetRenderer {
@@ -96,18 +88,6 @@ public class LevelToTargetRenderer {
             camera.setPosition(oldCameraPos.x, oldCameraPos.y, oldCameraPos.z);
             camera.setRotation(oldRotY, oldRotX, oldRoll);
         }
-    }
-
-    private Matrix4f createProjectionMatrixForCulling(Camera camera, int width, int height) {
-        float fovForCulling = Math.max(camera.fov, this.minecraft.options.fov().get().intValue());
-        Matrix4f projection = new Matrix4f();
-        return projection.perspective(
-                fovForCulling * (float) (Math.PI / 180.0),
-                (float) width / (float) height,
-                0.05F,
-                camera.depthFar,
-                RenderSystem.getDevice().getDeviceInfo().isZZeroToOne()
-        );
     }
 
     public void hijackRenderTarget(RenderTarget renderTarget) {

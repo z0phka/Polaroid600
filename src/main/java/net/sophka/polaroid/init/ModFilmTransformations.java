@@ -1,18 +1,10 @@
 package net.sophka.polaroid.init;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.data.FilmTransformationType;
-import net.sophka.polaroid.data.transformations.*;
+import net.sophka.polaroid.data.film.FilmTransformationType;
+import net.sophka.polaroid.data.film.transformations.*;
 
 import java.util.function.Supplier;
 

@@ -1,5 +1,6 @@
 package net.sophka.polaroid.init;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -20,6 +21,7 @@ public class ModItems {
 
     public static final DeferredItem<PhotoItem> PHOTO = ITEMS.registerItem("photo", PhotoItem::new, p -> p.stacksTo(1).component(ModDataComponents.CREATED_TIME,0L));
 
+    public static final DeferredItem<CartridgeItem> FILM_CARTRIDGE = ITEMS.registerItem("film_cartridge", CartridgeItem::new, p -> p.stacksTo(1));
     public static final DeferredItem<FilmItem> FILM_600 = ITEMS.registerItem("film_600", p -> new FilmItem(FilmType.COLOR, p), p -> p.stacksTo(10));
     public static final DeferredItem<FilmItem> FILM_600_BW = ITEMS.registerItem("film_600_bw", p -> new FilmItem(FilmType.BW, p), p -> p.stacksTo(10));
     public static final DeferredItem<FilmItem> FILM_600_BLUE = ITEMS.registerItem("film_600_blue", p -> new FilmItem(FilmType.BLUE, p), p -> p.stacksTo(10));
@@ -39,6 +41,7 @@ public class ModItems {
     public static final DeferredItem<Item> COLOR_REAGENT = ITEMS.registerSimpleItem("color_reagent", p -> p.stacksTo(64));
     public static final DeferredItem<Item> BW_NEGATIVE = ITEMS.registerSimpleItem("bw_negative", p -> p.stacksTo(64));
     public static final DeferredItem<Item> COLOR_NEGATIVE = ITEMS.registerSimpleItem("color_negative", p -> p.stacksTo(64));
+    public static final DeferredItem<DarkslideItem> DARKSLIDE = ITEMS.registerItem("darkslide", DarkslideItem::new, p -> p.stacksTo(64).component(ModDataComponents.DARKSLIDE, Identifier.fromNamespaceAndPath(Polaroid600.MODID,"debug")));
 
     public static final DeferredItem<CameraTripodItem> CAMERA_TRIPOD = ITEMS.registerItem("camera_tripod", CameraTripodItem::new, p -> p.stacksTo(16));
 

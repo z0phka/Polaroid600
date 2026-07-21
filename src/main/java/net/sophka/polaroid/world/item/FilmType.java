@@ -18,7 +18,7 @@ public enum FilmType implements StringRepresentable {
     GREEN(4,"green"),
     PURPLE(5,"purple");
 
-    public static final Codec<FilmType> COODEC = StringRepresentable.fromEnum(FilmType::values);
+    public static final Codec<FilmType> CODEC = StringRepresentable.fromEnum(FilmType::values);
     private static final IntFunction<FilmType> BY_ID = ByIdMap.continuous(FilmType::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
     public static final StreamCodec<ByteBuf, FilmType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, FilmType::getId);
 

@@ -1,0 +1,85 @@
+{
+  "name" : "Creative Briefs",
+  "darkslides" : [
+    {
+      "id" : "8_wishes",
+      "text" : "Here are 8 wishes.\nUse them wisely."
+    },
+    {
+      "id" : "keep_your_friends",
+      "text" : "Keep your friends\nclose, and your\nPolaroid film\nin the fridge."
+    },
+    {
+      "id" : "take_a_picture",
+      "text" : "Take a picture.\nIt'll last longer."
+    },
+    {
+      "id" : "force_to_be_reckoned",
+      "text" : "A force to be\nreckoned with."
+    },
+    {
+      "id" : "wish_you_were_here",
+      "text" : "Wish you\nwere here."
+    },
+    {
+      "id" : "off_the_path",
+      "text" : "Off the\nbeaten path."
+    },
+    {
+      "id" : "all_that_glitters",
+      "text" : "All that\nglitters."
+    },
+    {
+      "id" : "butter_to_my_jelly",
+      "text" : "The peanut\nbutter to my jelly."
+    },
+    {
+      "id" : "what_happens",
+      "text" : "What happens\nin Vegas."
+    },
+    {
+      "id" : "to_be_there",
+      "text" : "You had\nto be there."
+    },
+    {
+      "id" : "the_hunt",
+      "text" : "The hunt\nfor Bigfoot."
+    },
+    {
+      "id" : "when_life_gives_you",
+      "text" : "When life gives\nyou lemons."
+    },
+    {
+      "id" : "how_you_do_it",
+      "text" : "It ain't what\nyou do, it's how\nyou do it."
+    },
+    {
+      "id" : "love_me_tender",
+      "text" : "Love me\ntender."
+    },
+    {
+      "id" : "phasers_to_stun",
+      "text" : "Set phasers\nto stun!"
+    },
+    {
+      "id" : "what_i_want_to_be",
+      "text" : "What I want to be\nwhen I grow up."
+    },
+    {
+      "id" : "the_incredible_adventures",
+      "text" : "The incredible\nadventures of..."
+    },
+    {
+      "id" : "dream_on",
+      "text" : "Dream on."
+    },
+    {
+      "id" : "working_class",
+      "text" : "Working class\nheroes."
+    },
+    {
+      "id" : "welcome_to",
+      "text" : "Welcome to\nparadise."
+    }
+  ]
+}

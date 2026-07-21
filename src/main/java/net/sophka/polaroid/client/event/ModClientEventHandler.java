@@ -2,6 +2,8 @@ package net.sophka.polaroid.client.event;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -9,29 +11,45 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.common.tooltip.ItemTooltipHandler;
+import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.gui.screens.CameraFilmTooltipComponent;
+import net.sophka.polaroid.client.gui.screens.DarkslideScreen;
 import net.sophka.polaroid.client.gui.screens.PhotoScreen;
 import net.sophka.polaroid.client.init.ModKeyMappings;
 import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
 import net.sophka.polaroid.client.renderer.PhotoCache;
+import net.sophka.polaroid.data.darkslide.Darkslide;
+import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.network.*;
 import net.sophka.polaroid.world.item.CameraItem;
+import net.sophka.polaroid.world.item.DarkslideItem;
 import net.sophka.polaroid.world.item.PhotoItem;
 import net.sophka.polaroid.world.item.component.CameraFilm;
+import org.jspecify.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 @EventBusSubscriber(value = Dist.CLIENT, modid = Polaroid600.MODID)
 public class ModClientEventHandler {
 
     @SubscribeEvent
     public static void onItemUseEvent(PlayerInteractEvent.RightClickItem event){
-        if(event.getEntity() == Minecraft.getInstance().player && event.getItemStack().getItem() instanceof PhotoItem){
-            Minecraft.getInstance().setScreenAndShow(new PhotoScreen(event.getItemStack()));
+        if(event.getEntity() == Minecraft.getInstance().player) {
+            ItemStack stack = event.getItemStack();
+            if (stack.getItem() instanceof PhotoItem) {
+                Minecraft.getInstance().setScreenAndShow(new PhotoScreen(stack));
+            }
+            else if(stack.getItem() instanceof DarkslideItem){
+                Minecraft.getInstance().setScreenAndShow(new DarkslideScreen(stack));
+            }
         }
     }
 
@@ -93,6 +111,16 @@ public class ModClientEventHandler {
                 event.getTooltipElements().add(Either.right(new CameraFilmTooltipComponent.DataComponent(content)));
             }
         }
+    }
+    @SubscribeEvent
+    public static void registerTooltipAppenders(RegisterTooltipAppendersEvent event) {
+        event.registerComponentAppenderAfterAll(ModDataComponents.DARKSLIDE,
+                (stack, context, display, player, tooltipFlag, builder)
+                        -> DarkslideManager.CLIENT_INSTANCE.get(stack.get(ModDataComponents.DARKSLIDE)).ifPresent(
+                                darkslide -> builder.accept(
+                                        Component.literal(String.format("%s - %02d/%02d", darkslide.series().seriesName(), darkslide.ordinal(), darkslide.series().size()))
+                                                 .withColor(TextColor.GRAY))
+                ));
     }
 
     @SubscribeEvent

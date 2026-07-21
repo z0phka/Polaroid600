@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.world.item.FilmFormat;
@@ -42,7 +43,7 @@ public class ModDataComponents {
     public static final Supplier<DataComponentType<FilmType>> FILM_TYPE = DATA_COMPONENTS.registerComponentType(
             "film_type",
             builder -> builder
-                    .persistent(FilmType.COODEC)
+                    .persistent(FilmType.CODEC)
                     .networkSynchronized(FilmType.STREAM_CODEC));
 
     public static final Supplier<DataComponentType<FilmFormat>> FILM_FORMAT = DATA_COMPONENTS.registerComponentType(
@@ -62,4 +63,10 @@ public class ModDataComponents {
             builder -> builder
                     .persistent(Codec.BOOL)
                     .networkSynchronized(ByteBufCodecs.BOOL));
+
+    public static final Supplier<DataComponentType<Identifier>> DARKSLIDE = DATA_COMPONENTS.registerComponentType(
+            "darkslide",
+            builder -> builder
+                    .persistent(Identifier.CODEC)
+                    .networkSynchronized(Identifier.STREAM_CODEC));
 }

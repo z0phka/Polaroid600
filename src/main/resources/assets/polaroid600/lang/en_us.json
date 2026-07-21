@@ -13,6 +13,7 @@
   "item.polaroid600.film_600_debug_depth": "Debug Depth Data 600 film",
   "item.polaroid600.photo": "Photo",
 
+  "item.polaroid600.film_cartridge": "Film Cartridge",
   "item.polaroid600.blue_light_sensitive_layer": "Blue Light Sensitive Layer",
   "item.polaroid600.red_light_sensitive_layer": "Red Light Sensitive Layer",
   "item.polaroid600.green_light_sensitive_layer": "Green Light Sensitive Layer",
@@ -25,6 +26,7 @@
   "item.polaroid600.color_reagent": "Color Reagent",
   "item.polaroid600.bw_negative": "B&W Negative",
   "item.polaroid600.color_negative": "Color Negative",
+  "item.polaroid600.darkslide": "Darkslide",
 
   "subtitle.camera.shutter": "Camera Shutter",
 

@@ -40,6 +40,10 @@ public class RegisterEventHandler {
         registrar.playToClient(
                 PhotoCaptureRequestPayload.TYPE,
                 PhotoCaptureRequestPayload.STREAM_CODEC);
+
+        registrar.playToClient(
+                DarkslideSyncPayload.TYPE,
+                DarkslideSyncPayload.STREAM_CODEC);
     }
     @SubscribeEvent
     public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {

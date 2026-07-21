@@ -67,6 +67,10 @@ public class ClientRegisterEventHandler {
                 PhotoCaptureRequestPayload.TYPE,
                 ClientPayloadHandler::handlePhotoCaptureRequest
         );
+        event.register(
+                DarkslideSyncPayload.TYPE,
+                ClientPayloadHandler::handleDarkslideSync
+        );
     }
 
     @SubscribeEvent

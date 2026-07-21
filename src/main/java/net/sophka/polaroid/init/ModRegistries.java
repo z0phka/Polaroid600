@@ -1,12 +1,11 @@
 package net.sophka.polaroid.init;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.data.FilmTransformationType;
+import net.sophka.polaroid.data.film.FilmTransformationType;
 
 public class ModRegistries {
     public static final ResourceKey<Registry<FilmTransformationType<?>>> FILM_TRANSFORMATION_TYPE_KEY =

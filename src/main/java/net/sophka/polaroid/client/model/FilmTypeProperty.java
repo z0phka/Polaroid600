@@ -14,7 +14,7 @@ import org.jspecify.annotations.Nullable;
 public record FilmTypeProperty() implements SelectItemModelProperty<FilmType> {
     public static final SelectItemModelProperty.Type<FilmTypeProperty, FilmType> TYPE = SelectItemModelProperty.Type.create(
             MapCodec.unit(new FilmTypeProperty()),
-            FilmType.COODEC
+            FilmType.CODEC
     );
 
     @Nullable
@@ -25,7 +25,7 @@ public record FilmTypeProperty() implements SelectItemModelProperty<FilmType> {
 
     @Override
     public Codec<FilmType> valueCodec() {
-        return FilmType.COODEC;
+        return FilmType.CODEC;
     }
 
     @Override
