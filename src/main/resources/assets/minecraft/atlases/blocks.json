@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "type": "polaroid600:film_cartridge",
+      "film": "polaroid600:item/film_600",
+      "output": "polaroid600:item/cartridge_film_600"
+    },
+    {
+      "type": "polaroid600:film_cartridge",
+      "film": "polaroid600:item/film_600_bw",
+      "output": "polaroid600:item/cartridge_film_bw"
+    },
+    {
+      "type": "polaroid600:film_cartridge",
+      "film": "polaroid600:item/film_600_blue",
+      "output": "polaroid600:item/cartridge_film_blue"
+    },
+    {
+      "type": "polaroid600:film_cartridge",
+      "film": "polaroid600:item/film_600_green",
+      "output": "polaroid600:item/cartridge_film_green"
+    },
+    {
+      "type": "polaroid600:film_cartridge",
+      "film": "polaroid600:item/film_600_purple",
+      "output": "polaroid600:item/cartridge_film_purple"
+    }
+  ]
+}

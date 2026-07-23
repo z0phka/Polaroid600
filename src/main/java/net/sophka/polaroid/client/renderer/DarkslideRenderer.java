@@ -64,6 +64,10 @@ public class DarkslideRenderer {
                     float frameWidth = frame.frameWidth() * scale;
                     float frameHeight = frame.frameHeight() * scale;
 
+                    if (darkslide.type() == Darkslide.Type.WITH_IMAGE) {
+                        darkslide.image().ifPresent(image -> graphics.blit(RenderPipelines.GUI_TEXTURED, image, Math.round(x - frameTextureWidth / 2f), Math.round(y - frameTextureHeight / 2f), 0, 0, (int) frameTextureWidth, (int) frameTextureHeight, (int) frameTextureWidth, (int) frameTextureHeight));
+                    }
+
                     float deltaY = 3 * scale;
 
                     int topLeftX = Math.round(x - (frameWidth/2f));
@@ -78,7 +82,17 @@ public class DarkslideRenderer {
 
 
                     paragraph(graphics, "Instant film this side up.\nDo not remove this darkslide.", topLeftX + frameWidth/2f + arrowSize + 2, topLeftY + lineHeight,0xffffffff, 0.45f);
-                    paragraph(graphics, darkslide.text(), topLeftX + lineHeight, topLeftY + Math.round(frameHeight/3f),0xffffffff, 1.5f);
+
+                    int textX = topLeftX + lineHeight;
+                    int textY = topLeftY + Math.round(frameHeight/3f);
+                    float textScale = 1.5f;
+
+                    if(darkslide.type() == Darkslide.Type.WITH_IMAGE){
+                        textY = topLeftY + lineHeight + arrowSize;
+                        textScale = 1.2f;
+                    }
+
+                    paragraph(graphics, darkslide.text(), textX, textY,0xffffffff, textScale);
                     paragraph(graphics, "polaroid", topLeftX + lineHeight, topLeftY + frameHeight - 2.5f * lineHeight ,0xffffffff, 1);
 
                     String ordinal = String.format("%02d/%02d", darkslide.ordinal(), darkslide.series().size());

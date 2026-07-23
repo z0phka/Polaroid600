@@ -12,13 +12,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LevelRenderer.class)
 public class MixinLevelRenderer {
-  @Shadow
+    @Shadow
     private ShaderManager shaderManager;
 
-    @Inject(method = "getTransparencyChain",  at = @At("RETURN"), cancellable = true)
+    //TODO: Figure out how to do this properly, so shaders work and uniforms can be passed
+
+    @Inject(method = "getTransparencyChain", at = @At("RETURN"), cancellable = true)
     private void extractArmedEntityRenderState(CallbackInfoReturnable ci) {
         ClientPhotoTaker photoTaker = ClientPhotoTaker.instance();
-        if(photoTaker.getState() == ClientPhotoTaker.State.TAKING_PHOTO){
+        if (photoTaker.getState() == ClientPhotoTaker.State.TAKING_PHOTO) {
             ci.cancel();
             ci.setReturnValue(shaderManager.getPostChain(photoTaker.getAutofocus() ? ClientPhotoTaker.dofAutofocusEffect : ClientPhotoTaker.dofEffect, LevelTargetBundle.SORTING_TARGETS));
         }

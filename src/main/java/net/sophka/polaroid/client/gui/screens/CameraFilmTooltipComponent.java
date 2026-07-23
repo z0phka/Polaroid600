@@ -1,12 +1,9 @@
 package net.sophka.polaroid.client.gui.screens;
 
-import com.mojang.serialization.DataResult;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -14,15 +11,14 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.component.BundleContents;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.FilmContent;
 import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public class CameraFilmTooltipComponent implements ClientTooltipComponent {
-    public record DataComponent(CameraFilm film) implements TooltipComponent {}
+    public record DataComponent(FilmContent film) implements TooltipComponent {}
 
     private static final Identifier PROGRESSBAR_BORDER_SPRITE = Identifier.withDefaultNamespace("container/bundle/bundle_progressbar_border");
     private static final Identifier PROGRESSBAR_FILL_SPRITE = Identifier.withDefaultNamespace("container/bundle/bundle_progressbar_fill");
@@ -43,9 +39,9 @@ public class CameraFilmTooltipComponent implements ClientTooltipComponent {
     private static final Component BUNDLE_EMPTY_DESCRIPTION = Component.translatable("item.minecraft.bundle.empty.description");
 
 
-    private final CameraFilm contents;
+    private final FilmContent contents;
 
-    public CameraFilmTooltipComponent(CameraFilm contents) {
+    public CameraFilmTooltipComponent(FilmContent contents) {
         this.contents = contents;
     }
 

@@ -15,10 +15,12 @@ import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlers
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.sophka.polaroid.Polaroid600;
+import net.sophka.polaroid.Polaroid600Client;
 import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.gui.layers.DebugLayer;
 import net.sophka.polaroid.client.gui.screens.CameraFilmTooltipComponent;
 import net.sophka.polaroid.client.init.ModKeyMappings;
+import net.sophka.polaroid.client.model.FilmContentTypeProperty;
 import net.sophka.polaroid.client.model.FilmTypeProperty;
 import net.sophka.polaroid.client.model.ModArmPose;
 import net.sophka.polaroid.client.model.ModModelProvider;
@@ -26,6 +28,7 @@ import net.sophka.polaroid.client.model.entity.CameraTripodModel;
 import net.sophka.polaroid.client.renderer.entity.CameraTripodRenderer;
 import net.sophka.polaroid.client.renderer.level.block.PhotoBlockEntityRenderer;
 import net.sophka.polaroid.client.renderer.level.item.SelfieMirrorRenderer;
+import net.sophka.polaroid.client.renderer.texture.FilmCartridgeSpriteSource;
 import net.sophka.polaroid.init.ModBlockEntityTypes;
 import net.sophka.polaroid.init.ModEntityTypes;
 import net.sophka.polaroid.init.ModItems;
@@ -84,6 +87,10 @@ public class ClientRegisterEventHandler {
                 Identifier.fromNamespaceAndPath(Polaroid600.MODID, "film_type"),
                 FilmTypeProperty.TYPE
         );
+        event.register(
+                Identifier.fromNamespaceAndPath(Polaroid600.MODID, "film_content_type"),
+                FilmContentTypeProperty.TYPE
+        );
     }
 
     @SubscribeEvent
@@ -113,5 +120,10 @@ public class ClientRegisterEventHandler {
                 Identifier.fromNamespaceAndPath(Polaroid600.MODID, "selfie_mirror"),
                 SelfieMirrorRenderer.Unbaked.MAP_CODEC
         );
+    }
+
+    @SubscribeEvent
+    public static void registerSpriteSources(RegisterSpriteSourcesEvent event) {
+        event.register(Identifier.fromNamespaceAndPath(Polaroid600.MODID, "film_cartridge"), FilmCartridgeSpriteSource.CODEC);
     }
 }

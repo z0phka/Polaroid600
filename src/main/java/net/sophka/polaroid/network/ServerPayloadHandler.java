@@ -20,7 +20,7 @@ import net.sophka.polaroid.utils.Utils;
 import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.FilmFormat;
 import net.sophka.polaroid.world.item.FilmItem;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.FilmContent;
 import net.sophka.polaroid.world.item.component.DoubleExposure;
 
 import java.io.*;
@@ -51,8 +51,8 @@ public class ServerPayloadHandler {
 
     private static void handlePhotoData(final PhotoDataPayload data, final IPayloadContext context, PhotoTokenManager.Entry entry) {
         ItemStack cameraStack = entry.camera().get();
-        CameraFilm cameraFilm = cameraStack.get(ModDataComponents.CAMERA_FILM.get());
-        CameraFilm.Mutable mutableCameraFilm = new CameraFilm.Mutable(cameraFilm);
+        FilmContent filmContent = CameraItem.filmContent(cameraStack);
+        FilmContent.Mutable mutableCameraFilm = new FilmContent.Mutable(filmContent);
         DoubleExposure doubleExposure = cameraStack.getOrDefault(ModDataComponents.DOUBLE_EXPOSURE, DoubleExposure.OFF);
         DoubleExposure.Mutable mutableDoubleExposure = new DoubleExposure.Mutable(doubleExposure);
 
@@ -85,7 +85,7 @@ public class ServerPayloadHandler {
                     if(entry.consumeFilm()){
                         mutableCameraFilm.getFilm().shrink(1);
                     }
-                    cameraStack.set(ModDataComponents.CAMERA_FILM, mutableCameraFilm.toImmutable());
+                    CameraItem.updateFilmContent(cameraStack, mutableCameraFilm.toImmutable());
                     if (doubleExposure.isOn()) {
                         mutableDoubleExposure.turnOff();
                         cameraStack.set(ModDataComponents.DOUBLE_EXPOSURE, mutableDoubleExposure.toImmutable());
@@ -125,11 +125,11 @@ public class ServerPayloadHandler {
             return ItemStack.EMPTY;
         }
         Level level = player.level();
-        CameraFilm cameraFilm = cameraStack.get(ModDataComponents.CAMERA_FILM.get());
-        if (cameraFilm == null) {
+        FilmContent filmContent = CameraItem.filmContent(cameraStack);
+        if (filmContent == null) {
             return ItemStack.EMPTY;
         }
-        ItemStack filmStack = cameraFilm.getFilmStack();
+        ItemStack filmStack = filmContent.getFilmStack();
         if (filmStack.isEmpty() || !(filmStack.getItem() instanceof FilmItem filmItem)) {
             return ItemStack.EMPTY;
         }

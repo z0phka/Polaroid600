@@ -1,45 +1,36 @@
 package net.sophka.polaroid.world.item.component;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.component.BundleContents;
-import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.FilmItem;
 import org.apache.commons.lang3.math.Fraction;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static net.sophka.polaroid.world.item.CameraItem.MAX_SLIDES;
 
-public class CameraFilm {
-    public static final CameraFilm EMPTY = new CameraFilm(null);
+public class FilmContent {
+    public static final FilmContent EMPTY = new FilmContent(null);
 
     @Nullable
     private final ItemStackTemplate film;
 
-    public static final Codec<CameraFilm> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(ItemStackTemplate.CODEC.fieldOf("film").forGetter(CameraFilm::getFilm)).apply(instance, CameraFilm::new));
+    public static final Codec<FilmContent> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(ItemStackTemplate.CODEC.fieldOf("film").forGetter(FilmContent::getFilm)).apply(instance, FilmContent::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, CameraFilm> STREAM_CODEC = StreamCodec.composite(ItemStackTemplate.STREAM_CODEC, CameraFilm::getFilm,CameraFilm::new);
-    public CameraFilm(@Nullable ItemStackTemplate film){
+    public static final StreamCodec<RegistryFriendlyByteBuf, FilmContent> STREAM_CODEC = StreamCodec.composite(ItemStackTemplate.STREAM_CODEC, FilmContent::getFilm, FilmContent::new);
+    public FilmContent(@Nullable ItemStackTemplate film){
         this.film = film;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof CameraFilm that)) return false;
+        if (!(o instanceof FilmContent that)) return false;
         return Objects.equals(film, that.film);
     }
 
@@ -67,8 +58,8 @@ public class CameraFilm {
     public static class Mutable {
         private ItemStack film;
 
-        public Mutable(CameraFilm cameraFilm) {
-            this.film = cameraFilm.getFilmStack();
+        public Mutable(FilmContent filmContent) {
+            this.film = filmContent.getFilmStack();
         }
 
         public Mutable clear() {
@@ -94,8 +85,8 @@ public class CameraFilm {
             return 0;
         }
 
-        public CameraFilm toImmutable(){
-            return new CameraFilm(this.film == null || this.film.isEmpty() ? null : ItemStackTemplate.fromNonEmptyStack(this.film));
+        public FilmContent toImmutable(){
+            return new FilmContent(this.film == null || this.film.isEmpty() ? null : ItemStackTemplate.fromNonEmptyStack(this.film));
         }
     }
 }

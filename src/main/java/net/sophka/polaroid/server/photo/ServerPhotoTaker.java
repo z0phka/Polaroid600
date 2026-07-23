@@ -11,7 +11,7 @@ import net.sophka.polaroid.init.ModSounds;
 import net.sophka.polaroid.network.PhotoCaptureRequestPayload;
 import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.FilmItem;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.FilmContent;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -24,16 +24,19 @@ public class ServerPhotoTaker {
         if (player.getCooldowns().isOnCooldown(cameraStack)) {
             return;
         }
-        CameraFilm cameraFilm = cameraStack.get(ModDataComponents.CAMERA_FILM.get());
-        if (cameraFilm == null) {
+        FilmContent filmContent = CameraItem.filmContent(cameraStack);
+        if (filmContent == null) {
             return;
         }
-        ItemStack filmStack = cameraFilm.getFilmStack();
+        ItemStack filmStack = filmContent.getFilmStack();
         if (filmStack.isEmpty() || !(filmStack.getItem() instanceof FilmItem)) {
             return;
         }
 
-        int token = PhotoTokenManager.getInstance().acquireTokenFor(player, () -> cameraStack, photoStack -> givePhoto(photoStack, player), !player.isCreative());
+        int token = PhotoTokenManager.getInstance().acquireTokenFor(player, () -> cameraStack, photoStack -> {
+                player.getCooldowns().addCooldown(cameraStack, 60);
+                givePhoto(photoStack, player);
+            }, !player.isCreative());
         PacketDistributor.sendToPlayer(player, new PhotoCaptureRequestPayload(cameraStack, true, 0,0,0,0,0,0, token));
     }
 

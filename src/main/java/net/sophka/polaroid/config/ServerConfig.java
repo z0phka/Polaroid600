@@ -7,15 +7,15 @@ public class ServerConfig {
 
     public static final ModConfigSpec.IntValue DEVELOPMENT_TIME = BUILDER
             .comment("The amount of time in ticks it takes for a photo to develop.")
-            .defineInRange("developmentTime", 1200, 0, Integer.MAX_VALUE);
+            .defineInRange("film.developmentTime", 1200, 0, Integer.MAX_VALUE);
 
     public static final ModConfigSpec.IntValue SOLARIZATION_TIME = BUILDER
             .comment("The amount of time in ticks after ejection, during which the photo is susceptible to sun damage")
-            .defineInRange("solarizationTime", 300, 0, Integer.MAX_VALUE);
+            .defineInRange("film.solarizationTime", 300, 0, Integer.MAX_VALUE);
 
-    public static final ModConfigSpec.IntValue WALL_GRID_SIZE = BUILDER
-            .comment("The width and height of the grid of photos on a single block.")
-            .defineInRange("wallGridSize", 5, 0, 7);
+    public static final ModConfigSpec.EnumValue<FilmMode> CAMERA_FILM_MODE = BUILDER
+            .comment("Whether should cameras directly accept film like a bundle, or they should accept only cartridges filled with film")
+            .defineEnum("film.filmMode", FilmMode.CARTRIDGE);
 
 
     public static final ModConfigSpec SPEC = BUILDER.build();

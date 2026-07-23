@@ -94,11 +94,11 @@ public class PhotoRenderer {
 
             if (sunDamage > 0) {
                 int damageColor = ARGB.color((int) Math.round(255 * sunDamage), 0xffffff);
-                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), damageColor);
+                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), Math.round(y + frameHeight / 2f - bottomMargin), damageColor);
             }
             if (progress < 1) {
                 int opacifierColor = ARGB.color((int) Math.round(255 * Utils.clampUnit(1 - progress * 1.25)), 84, 169, 229);
-                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), (int) (y + frameHeight / 2f - bottomMargin), opacifierColor);
+                graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), Math.round(y + frameHeight / 2f - bottomMargin), opacifierColor);
             }
 
             if (itemStack.getCustomName() != null) {

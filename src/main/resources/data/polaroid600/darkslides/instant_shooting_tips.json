@@ -1,0 +1,65 @@
+{
+  "name": "Instant Shooting Tips",
+  "darkslides": [
+    {
+      "id": "its_your_tool",
+      "text": "It's your\ntool. Keep\nit cool.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/its_your_tool.png"
+    },
+    {
+      "id": "dont_spoil",
+      "text": "Don't spoil\nthe scene.\nKeep your\nrollers clean.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/dont_spoil.png"
+    },
+    {
+      "id": "once_clue",
+      "text": "One clue:\ntlight behind you.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/once_clue.png"
+    },
+    {
+      "id": "shield_it",
+      "text": "Shield it\nfrom light 'till the\npicture's in sight.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/shield_it.png"
+    },
+    {
+      "id": "shoot_wait",
+      "text": "Shoot. Wait.\nAppreciate.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/shoot_wait.png"
+    },
+    {
+      "id": "wherever_you_aim",
+      "text": "Wherever\nyou aim,\nno two pictures\nare the same.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/wherever_you_aim.png"
+    },
+    {
+      "id": "make_a_splash",
+      "text": "Make a\nsplash.\nUse the\nflash.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/make_a_splash.png"
+    },
+    {
+      "id": "get_ready",
+      "text": "Get ready.\n Hold it\nsteady",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/get_ready.png"
+    },
+    {
+      "id": "loves_light",
+      "text": "This film\nloves light.\nShoot\nsomewhere\nbright.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/loves_light.png"
+    },
+    {
+      "id": "when_not_on_display",
+      "text": "When\nthey're not\non display,\nstore them\n safely away.",
+      "type": "with_image",
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/when_not_on_display.png"
+    }
+  ]
+}

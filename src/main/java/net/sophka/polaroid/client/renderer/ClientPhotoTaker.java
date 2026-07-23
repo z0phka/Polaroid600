@@ -25,7 +25,7 @@ import net.sophka.polaroid.world.entity.CameraViewEntity;
 import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.FilmFormat;
 import net.sophka.polaroid.world.item.FilmItem;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.FilmContent;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -79,11 +79,11 @@ public class ClientPhotoTaker {
         if (!(cameraStack.getItem() instanceof CameraItem cameraItem)) {
             return;
         }
-        CameraFilm cameraFilm = cameraStack.get(ModDataComponents.CAMERA_FILM.get());
-        if (cameraFilm == null) {
+        FilmContent filmContent = CameraItem.filmContent(cameraStack);
+        if (filmContent == null) {
             return;
         }
-        ItemStack filmStack = cameraFilm.getFilmStack();
+        ItemStack filmStack = filmContent.getFilmStack();
         if (!(filmStack.getItem() instanceof FilmItem filmItem)) {
             return;
         }

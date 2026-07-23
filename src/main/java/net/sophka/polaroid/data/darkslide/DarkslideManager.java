@@ -47,4 +47,8 @@ public class DarkslideManager extends SimpleJsonResourceReloadListener<Darkslide
     public Map<Identifier, DarkslideSeries> darkslideSeries(){
         return Collections.unmodifiableMap(darkslideSeries);
     }
+
+    public List<Identifier> darkslideIdentifiers(){
+        return darkslides.keySet().stream().toList();
+    }
 }

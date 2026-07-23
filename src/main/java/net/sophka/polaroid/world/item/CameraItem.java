@@ -1,6 +1,8 @@
 package net.sophka.polaroid.world.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +11,6 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,10 +19,19 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.level.Level;
+import net.sophka.polaroid.Polaroid600;
+import net.sophka.polaroid.config.FilmMode;
+import net.sophka.polaroid.config.ServerConfig;
+import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.init.ModDataComponents;
+import net.sophka.polaroid.init.ModItems;
 import net.sophka.polaroid.server.photo.ServerPhotoTaker;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.CameraCartridge;
+import net.sophka.polaroid.world.item.component.FilmContent;
+
+import java.util.List;
 
 public class CameraItem extends Item {
 
@@ -39,6 +49,7 @@ public class CameraItem extends Item {
         private boolean timer;
         private boolean selfieMirror;
         private FlashMode flashMode = FlashMode.NEVER;
+        private boolean manualControl = false;
 
         public CameraProperties withFOV(float fov){
             this.fov = fov;
@@ -86,6 +97,15 @@ public class CameraItem extends Item {
             return this;
         }
 
+        public CameraProperties withManualControl(){
+            return withManualControl(true);
+        }
+
+        public CameraProperties withManualControl(boolean manualControl){
+            this.manualControl = manualControl;
+            return this;
+        }
+
         public float getFov() {
             return fov;
         }
@@ -113,6 +133,10 @@ public class CameraItem extends Item {
         public boolean hasSelfieMirror(){
             return this.selfieMirror;
         }
+
+        public boolean hasManualControl(){
+            return this.manualControl;
+        }
     }
 
     public static int MAX_SLIDES = 10;
@@ -122,14 +146,9 @@ public class CameraItem extends Item {
     public final CameraProperties cameraProperties;
 
     public CameraItem(Properties properties, CameraProperties cameraProperties) {
-        super(properties);
+        super(properties.component(ModDataComponents.FILM_CONTENT, FilmContent.EMPTY).component(ModDataComponents.EXPOSURE,0).component(ModDataComponents.CAMERA_CARTRIDGE,CameraCartridge.EMPTY));
         this.cameraProperties = cameraProperties;
     }
-
-    /*public int getUseDuration(ItemStack itemStack, LivingEntity user) {
-        return 2000;
-    }*/
-
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
@@ -145,48 +164,43 @@ public class CameraItem extends Item {
         player.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResult.SUCCESS;
     }
-/*
-    public boolean releaseUsing(ItemStack itemStack, Level level, LivingEntity entity, int remainingTime) {
-        if(level.isClientSide()){
-            return false;
-        }
-        if (!(entity instanceof ServerPlayer player)) {
-            return false;
-        }
-        if (remainingTime < 200) return false;
-        if(!canShoot(itemStack)){
-            playEmptySound(level, player.blockPosition());
-            return false;
-        }
-        ServerPhotoTaker.takePhoto(player, itemStack);
-
-        if(level.isClientSide()){
-            if(player.isCrouching()){
-                ModClientEventHandler.selfieMode = !ModClientEventHandler.selfieMode;
-            }
-            else{
-                PhotoTaker.instance().takePhoto(itemStack, null, -1);
-            }
-        }
-        player.awardStat(Stats.ITEM_USED.get(this));
-        return true;
-    }*/
 
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack itemStack) {
         return ItemUseAnimation.BOW;
     }
 
+    public static FilmContent filmContent(ItemStack stack){
+        if(ServerConfig.CAMERA_FILM_MODE.get() == FilmMode.DIRECT){
+            return stack.getOrDefault(ModDataComponents.FILM_CONTENT.get(), FilmContent.EMPTY);
+        }
+        else{
+            return stack.getOrDefault(ModDataComponents.CAMERA_CARTRIDGE.get(), CameraCartridge.EMPTY).filmContent();
+        }
+    }
+
+    public static void updateFilmContent(ItemStack stack, FilmContent content){
+        if(ServerConfig.CAMERA_FILM_MODE.get() == FilmMode.DIRECT){
+            stack.set(ModDataComponents.FILM_CONTENT, content);
+        }
+        else {
+            CameraCartridge cameraCartridge = stack.getOrDefault(ModDataComponents.CAMERA_CARTRIDGE.get(), CameraCartridge.EMPTY);
+            CameraCartridge.Mutable mutable = new CameraCartridge.Mutable(cameraCartridge);
+            if (!mutable.getCartridgeStack().isEmpty()) {
+                mutable.getCartridgeStack().set(ModDataComponents.FILM_CONTENT, content);
+                stack.set(ModDataComponents.CAMERA_CARTRIDGE, mutable.toImmutable());
+            }
+        }
+    }
+
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        CameraFilm content = stack.getOrDefault(ModDataComponents.CAMERA_FILM.get(), CameraFilm.EMPTY);
-        return content.count() > 0;
+        return filmContent(stack).count() > 0;
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        CameraFilm content = stack.getOrDefault(ModDataComponents.CAMERA_FILM.get(), CameraFilm.EMPTY);
-        return Math.min(Mth.mulAndTruncate(content.fraction(), 13), 13);
+        return Math.min(Mth.mulAndTruncate(filmContent(stack).fraction(), 13), 13);
     }
 
     @Override
@@ -195,29 +209,75 @@ public class CameraItem extends Item {
     }
 
     @Override
+    public boolean overrideStackedOnOther(ItemStack self, Slot slot, ClickAction clickAction, Player player) {
+        if(ServerConfig.CAMERA_FILM_MODE.get() != FilmMode.CARTRIDGE){
+            return super.overrideStackedOnOther(self, slot, clickAction, player);
+        }
+        CameraCartridge cameraCartridge = self.getOrDefault(ModDataComponents.CAMERA_CARTRIDGE, CameraCartridge.EMPTY);
+        ItemStack other = slot.getItem();
+
+        CameraCartridge.Mutable mutable = new CameraCartridge.Mutable(cameraCartridge);
+        if (clickAction == ClickAction.SECONDARY && other.isEmpty() && mutable.filmCount() == 0) {
+            ItemStack itemStack = mutable.getCartridgeStack();
+            slot.safeInsert(itemStack);
+            self.set(ModDataComponents.CAMERA_CARTRIDGE, mutable.toImmutable());
+            this.broadcastChangesOnContainerMenu(player);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem) {
         if (self.getCount() != 1) return false;
         if (clickAction == ClickAction.PRIMARY && other.isEmpty()) {
             return false;
         } else {
-            CameraFilm initialContents = self.get(ModDataComponents.CAMERA_FILM.get());
-            if (initialContents == null) {
-                return false;
-            } else {
-                CameraFilm.Mutable contents = new CameraFilm.Mutable(initialContents);
-                if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-                    if (slot.allowModification(player) && contents.tryInsert(other) > 0) {
-                        //playInsertSound(player);
-                    } else {
-                        //playInsertFailSound(player);
-                    }
-
-                    self.set(ModDataComponents.CAMERA_FILM.get(), contents.toImmutable());
-                    this.broadcastChangesOnContainerMenu(player);
-                    return true;
-                }
-                return false;
+            if(ServerConfig.CAMERA_FILM_MODE.get() == FilmMode.CARTRIDGE){
+                return handleCartridgeInsert(self, other, slot, clickAction, player, carriedItem);
             }
+            return handleFilmInsert(self, other, slot, clickAction, player, carriedItem);
+        }
+    }
+
+    private boolean handleCartridgeInsert(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem){
+        CameraCartridge initialContents = self.get(ModDataComponents.CAMERA_CARTRIDGE.get());
+        if (initialContents == null) {
+            return false;
+        } else {
+            CameraCartridge.Mutable contents = new CameraCartridge.Mutable(initialContents);
+            if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
+                contents.tryInsert(other);
+                self.set(ModDataComponents.CAMERA_CARTRIDGE.get(), contents.toImmutable());
+                if(contents.filmCount() >= 8){
+                    List<Identifier> darkslides = DarkslideManager.INSTANCE.darkslideIdentifiers();
+                    if(!darkslides.isEmpty()){
+                        //TODO: Send packet because Mojang does not like consistency
+                        ItemStack darkslide = new ItemStack(ModItems.DARKSLIDE.get());
+                        darkslide.set(ModDataComponents.DARKSLIDE, darkslides.get(player.getRandom().nextInt(darkslides.size())));
+                        ServerPhotoTaker.givePhoto(darkslide, player);
+                    }
+                }
+                this.broadcastChangesOnContainerMenu(player);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private boolean handleFilmInsert(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem){
+        FilmContent initialContents = self.get(ModDataComponents.FILM_CONTENT.get());
+        if (initialContents == null) {
+            return false;
+        } else {
+            FilmContent.Mutable contents = new FilmContent.Mutable(initialContents);
+            if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
+                contents.tryInsert(other);
+                self.set(ModDataComponents.FILM_CONTENT.get(), contents.toImmutable());
+                this.broadcastChangesOnContainerMenu(player);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -237,11 +297,11 @@ public class CameraItem extends Item {
     }
 
     public boolean canShoot(ItemStack cameraStack) {
-        CameraFilm cameraFilm = cameraStack.get(ModDataComponents.CAMERA_FILM.get());
-        if(cameraFilm == null){
+        FilmContent filmContent = filmContent(cameraStack);
+        if(filmContent == null){
             return false;
         }
-        ItemStack filmStack = cameraFilm.getFilmStack();
+        ItemStack filmStack = filmContent.getFilmStack();
         return !filmStack.isEmpty() && filmStack.getItem() instanceof FilmItem;
     }
 

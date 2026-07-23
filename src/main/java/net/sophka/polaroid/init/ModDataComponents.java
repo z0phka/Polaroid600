@@ -9,7 +9,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.world.item.FilmFormat;
 import net.sophka.polaroid.world.item.FilmType;
-import net.sophka.polaroid.world.item.component.CameraFilm;
+import net.sophka.polaroid.world.item.component.CameraCartridge;
+import net.sophka.polaroid.world.item.component.FilmContent;
 import net.sophka.polaroid.world.item.component.DoubleExposure;
 
 import java.util.function.Supplier;
@@ -52,8 +53,11 @@ public class ModDataComponents {
                     .persistent(FilmFormat.CODEC)
                     .networkSynchronized(FilmFormat.STREAM_CODEC));
 
-    public static final Supplier<DataComponentType<CameraFilm>> CAMERA_FILM = DATA_COMPONENTS.registerComponentType("camera_film",
-            builder -> builder.persistent(CameraFilm.CODEC).networkSynchronized(CameraFilm.STREAM_CODEC));
+    public static final Supplier<DataComponentType<FilmContent>> FILM_CONTENT = DATA_COMPONENTS.registerComponentType("film_content",
+            builder -> builder.persistent(FilmContent.CODEC).networkSynchronized(FilmContent.STREAM_CODEC));
+
+    public static final Supplier<DataComponentType<CameraCartridge>> CAMERA_CARTRIDGE = DATA_COMPONENTS.registerComponentType("camera_cartridge",
+            builder -> builder.persistent(CameraCartridge.CODEC).networkSynchronized(CameraCartridge.STREAM_CODEC));
 
     public static final Supplier<DataComponentType<DoubleExposure>> DOUBLE_EXPOSURE = DATA_COMPONENTS.registerComponentType("double_exposure",
             builder -> builder.persistent(DoubleExposure.CODEC).networkSynchronized(DoubleExposure.STREAM_CODEC));
