@@ -73,4 +73,16 @@ public class ModDataComponents {
             builder -> builder
                     .persistent(Identifier.CODEC)
                     .networkSynchronized(Identifier.STREAM_CODEC));
+
+    public static final Supplier<DataComponentType<Boolean>> INITIALIZED = DATA_COMPONENTS.registerComponentType(
+            "initialized",
+            builder -> builder
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL));
+
+    public static final Supplier<DataComponentType<Boolean>> LAND_CAMERA = DATA_COMPONENTS.registerComponentType(
+            "land_camera",
+            builder -> builder
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL));
 }

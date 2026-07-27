@@ -32,6 +32,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.sophka.polaroid.Polaroid600;
+import net.sophka.polaroid.config.ServerConfig;
 import net.sophka.polaroid.init.ModSounds;
 import net.sophka.polaroid.server.photo.ServerPhotoTaker;
 import net.sophka.polaroid.world.item.CameraItem;
@@ -109,11 +110,13 @@ public class CameraTripodEntity extends LivingEntity {
             this.timer--;
         }
 
-        boolean redstonePowered = level().hasNeighborSignal(blockPosition());
-        if (redstonePowered & !poweredPrev) {
-            shoot();
+        if(ServerConfig.CAMERA_REDSTONE.get()){
+            boolean redstonePowered = level().hasNeighborSignal(blockPosition());
+            if (redstonePowered & !poweredPrev) {
+                shoot();
+            }
+            poweredPrev = redstonePowered;
         }
-        poweredPrev = redstonePowered;
     }
 
     public boolean canShoot() {

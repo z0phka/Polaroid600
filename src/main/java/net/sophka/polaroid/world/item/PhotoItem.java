@@ -6,11 +6,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -126,12 +128,14 @@ public class PhotoItem extends BlockItem {
         if((slot != EquipmentSlot.MAINHAND && slot != EquipmentSlot.OFFHAND) || !sunDamageSusceptible(level, itemStack)){
             return;
         }
-        if(!level.dimensionType().hasSkyLight() || level.dimensionType().hasCeiling() || level.dimensionType().skybox() != DimensionType.Skybox.OVERWORLD){
+        BlockPos roundedPos = BlockPos.containing(owner.getX(), owner.getEyeY(), owner.getZ());
+        if(level.isRaining() || !level.canSeeSky(roundedPos)){
             return;
         }
-        BlockPos pos = owner.getOnPos();
-        int target = level.getEffectiveSkyBrightness(pos);
-        float sunAngle = level.environmentAttributes().getValue(EnvironmentAttributes.SUN_ANGLE, pos) * (float) (Math.PI / 180.0);
+        float light = owner.getLightLevelDependentMagicValue();
+        if(light < 0.5){
+            return;
+        }
         itemStack.set(ModDataComponents.SUN_DAMAGE, itemStack.getOrDefault(ModDataComponents.SUN_DAMAGE,0) + 1);
     }
 

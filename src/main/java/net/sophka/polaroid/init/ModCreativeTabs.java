@@ -9,7 +9,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.config.ClientConfig;
-import net.sophka.polaroid.data.darkslide.Darkslide;
 import net.sophka.polaroid.data.darkslide.DarkslideManager;
 
 public class ModCreativeTabs {
@@ -20,10 +19,10 @@ public class ModCreativeTabs {
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> ModItems.FILM_600.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(ModItems.CAMERA_600.get());
-                output.accept(ModItems.CAMERA_600_AF.get());
+                output.accept(ModItems.CAMERA_635.get());
+                output.accept(ModItems.CAMERA_660_AF.get());
                 output.accept(ModItems.CAMERA_SPECTRA.get());
-                output.accept(ModItems.CAMERA_SX_70.get());
+                //output.accept(ModItems.CAMERA_SX_70.get());
                 output.accept(ModItems.CAMERA_NOW.get());
                 output.accept(ModItems.CAMERA_GO.get());
                 output.accept(ModItems.CAMERA_TRIPOD.get());

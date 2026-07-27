@@ -15,7 +15,11 @@ public class ServerConfig {
 
     public static final ModConfigSpec.EnumValue<FilmMode> CAMERA_FILM_MODE = BUILDER
             .comment("Whether should cameras directly accept film like a bundle, or they should accept only cartridges filled with film")
-            .defineEnum("film.filmMode", FilmMode.CARTRIDGE);
+            .defineEnum("camera.filmMode", FilmMode.CARTRIDGE);
+
+    public static final ModConfigSpec.BooleanValue CAMERA_REDSTONE = BUILDER
+            .comment("Whether redstone interactions with a tripod should be enabled.")
+            .define("camera.redstone", true);
 
 
     public static final ModConfigSpec SPEC = BUILDER.build();

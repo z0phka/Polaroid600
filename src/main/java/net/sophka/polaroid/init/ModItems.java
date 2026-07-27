@@ -12,8 +12,8 @@ import net.sophka.polaroid.world.item.component.DoubleExposure;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Polaroid600.MODID);
 
-    public static final DeferredItem<Item> CAMERA_600 = ITEMS.registerItem("camera_600", p -> new CameraItem(p, new CameraItem.CameraProperties()), p -> p.stacksTo(1));
-    public static final DeferredItem<Item> CAMERA_600_AF = ITEMS.registerItem("camera_600_af", p -> new CameraItem(p,new CameraItem.CameraProperties().withAF()),p -> p.stacksTo(1).component(ModDataComponents.AF,false));
+    public static final DeferredItem<Item> CAMERA_635 = ITEMS.registerItem("camera_635", p -> new CameraItem(p, new CameraItem.CameraProperties()), p -> p.stacksTo(1));
+    public static final DeferredItem<Item> CAMERA_660_AF = ITEMS.registerItem("camera_660_af", p -> new CameraItem(p,new CameraItem.CameraProperties().withAF()), p -> p.stacksTo(1).component(ModDataComponents.AF,false));
     public static final DeferredItem<Item> CAMERA_NOW = ITEMS.registerItem("camera_now", p -> new CameraItem(p,new CameraItem.CameraProperties().withDoubleExposure().withAF().withTimer()),p -> p.stacksTo(1).component(ModDataComponents.DOUBLE_EXPOSURE, DoubleExposure.OFF).component(ModDataComponents.AF,false));
     public static final DeferredItem<Item> CAMERA_GO = ITEMS.registerItem("camera_go", p -> new CameraItem(p,new CameraItem.CameraProperties().withDoubleExposure().withAF().withFilmFormat(FilmFormat._GO).withTimer().withSelfieMirror()), p -> p.stacksTo(1).component(ModDataComponents.DOUBLE_EXPOSURE, DoubleExposure.OFF).component(ModDataComponents.AF,false));
     public static final DeferredItem<Item> CAMERA_SPECTRA = ITEMS.registerItem("camera_spectra", p -> new CameraItem(p,new CameraItem.CameraProperties().withAF().withFilmFormat(FilmFormat._1200).withTimer()), p -> p.stacksTo(1).component(ModDataComponents.AF,false));

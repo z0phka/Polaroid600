@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": "minecraft:resin_brick",
+    "C": "minecraft:copper_nugget",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "C C",
+    "RIR"
+  ],
+  "result": {
+    "id": "polaroid600:film_cartridge"
+  }
+}

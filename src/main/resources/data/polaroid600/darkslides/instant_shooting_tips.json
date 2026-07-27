@@ -14,10 +14,10 @@
       "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/dont_spoil.png"
     },
     {
-      "id": "once_clue",
-      "text": "One clue:\ntlight behind you.",
+      "id": "one_clue",
+      "text": "One clue:\nlight behind you.",
       "type": "with_image",
-      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/once_clue.png"
+      "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/one_clue.png"
     },
     {
       "id": "shield_it",
@@ -45,7 +45,7 @@
     },
     {
       "id": "get_ready",
-      "text": "Get ready.\n Hold it\nsteady",
+      "text": "Get ready.\nHold it\nsteady",
       "type": "with_image",
       "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/get_ready.png"
     },
@@ -57,7 +57,7 @@
     },
     {
       "id": "when_not_on_display",
-      "text": "When\nthey're not\non display,\nstore them\n safely away.",
+      "text": "When\nthey're not\non display,\nstore them\nsafely away.",
       "type": "with_image",
       "image": "polaroid600:textures/photo/darkslide/instant_shooting_tips/when_not_on_display.png"
     }
