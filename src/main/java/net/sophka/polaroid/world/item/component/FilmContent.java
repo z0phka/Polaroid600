@@ -12,10 +12,9 @@ import org.apache.commons.lang3.math.Fraction;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import static net.sophka.polaroid.world.item.CameraItem.MAX_SLIDES;
-
 public class FilmContent {
     public static final FilmContent EMPTY = new FilmContent(null);
+    public static final int MAX_CAPACITY = 8;
 
     @Nullable
     private final ItemStackTemplate film;
@@ -52,7 +51,7 @@ public class FilmContent {
     }
 
     public Fraction fraction(){
-        return Fraction.getFraction(count(), MAX_SLIDES);
+        return Fraction.getFraction(count(), MAX_CAPACITY);
     }
 
     public static class Mutable {
@@ -77,7 +76,7 @@ public class FilmContent {
                     this.film = stack.copy();
                     this.film.setCount(0);
                 }
-                int countToInsert = Math.min(MAX_SLIDES - film.count(), stack.count());
+                int countToInsert = Math.min(MAX_CAPACITY - film.count(), stack.count());
                 film.grow(countToInsert);
                 stack.shrink(countToInsert);
                 return countToInsert;

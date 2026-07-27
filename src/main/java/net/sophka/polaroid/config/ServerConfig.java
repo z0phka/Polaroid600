@@ -13,6 +13,11 @@ public class ServerConfig {
             .comment("The amount of time in ticks after ejection, during which the photo is susceptible to sun damage")
             .defineInRange("film.solarizationTime", 300, 0, Integer.MAX_VALUE);
 
+    public static final ModConfigSpec.BooleanValue SOLARIZATION_ENABLED = BUILDER
+            .comment("Whether solarization should be enabled.")
+            .define("film.solarizationEnabled", true);
+
+
     public static final ModConfigSpec.EnumValue<FilmMode> CAMERA_FILM_MODE = BUILDER
             .comment("Whether should cameras directly accept film like a bundle, or they should accept only cartridges filled with film")
             .defineEnum("camera.filmMode", FilmMode.CARTRIDGE);

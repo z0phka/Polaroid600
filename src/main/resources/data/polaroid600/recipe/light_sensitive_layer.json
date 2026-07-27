@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "minecraft:prismarine_crystals",
+    "P": "minecraft:paper",
+    "O": "minecraft:coal",
+    "T": "minecraft:bone_meal"
+  },
+  "pattern": [
+    "COT",
+    " P ",
+    "COT"
+  ],
+  "result": {
+    "id": "polaroid600:light_sensitive_layer",
+    "count": 4
+  }
+}

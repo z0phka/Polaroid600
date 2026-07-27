@@ -36,7 +36,7 @@ public class PhotoTokenManager {
 
     public boolean verify(int token, Player player){
         if(tokens.containsKey(token)){
-            return tokens.get(token).id == player.getUUID();
+            return tokens.get(token).id.equals(player.getUUID());
         }
         return false;
     }

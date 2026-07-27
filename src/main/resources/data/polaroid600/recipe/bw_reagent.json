@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:potion",
+    "minecraft:sulfur",
+    "minecraft:sugar",
+    "minecraft:sugar",
+    "minecraft:bone_meal",
+    "minecraft:bone_meal"
+  ],
+  "result": {
+    "id": "polaroid600:bw_reagent",
+    "count": 8
+  }
+}

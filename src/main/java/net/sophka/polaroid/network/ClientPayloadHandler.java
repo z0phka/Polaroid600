@@ -10,9 +10,6 @@ import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.world.entity.CameraViewEntity;
 import net.sophka.polaroid.world.item.FilmFormat;
 
-import java.io.File;
-import java.io.IOException;
-
 public class ClientPayloadHandler {
     public static void handlePhotoData(final PhotoDataPayload data, final IPayloadContext context) {
         Polaroid600.LOGGER.debug("{} bytes received", data.data().length);

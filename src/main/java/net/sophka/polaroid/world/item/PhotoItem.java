@@ -116,11 +116,11 @@ public class PhotoItem extends BlockItem {
     }
 
     public static boolean sunDamageSusceptible(Level level, ItemStack stack){
-        return timeSinceCreation(level, stack) < ServerConfig.SOLARIZATION_TIME.get();
+        return ServerConfig.SOLARIZATION_ENABLED.get() && timeSinceCreation(level, stack) < ServerConfig.SOLARIZATION_TIME.get();
     }
 
     public static double sunDamage(Level level, ItemStack stack){
-        return Utils.clampUnit(stack.getOrDefault(ModDataComponents.SUN_DAMAGE,0) / (float)ServerConfig.SOLARIZATION_TIME.get());
+        return ServerConfig.SOLARIZATION_ENABLED.get() ? Utils.clampUnit(stack.getOrDefault(ModDataComponents.SUN_DAMAGE,0) / (float)ServerConfig.SOLARIZATION_TIME.get()) : 0;
     }
 
     @Override

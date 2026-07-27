@@ -5,7 +5,7 @@
     "polaroid600:color_negative",
     "polaroid600:bw_reagent",
     "minecraft:glass_pane",
-    "polaroid600:yellow_developer"
+    "minecraft:yellow_dye"
   ],
   "result": {
     "id": "polaroid600:film_600_green"

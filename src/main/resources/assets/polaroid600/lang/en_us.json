@@ -5,6 +5,7 @@
   "item.polaroid600.camera_660_af.land": "Polaroid Sun 660 AF Land Camera",
   "item.polaroid600.camera_now": "Polaroid Now",
   "item.polaroid600.camera_spectra": "Polaroid Spectra",
+  "item.polaroid600.camera_go": "Polaroid Go",
   "item.polaroid600.film_600": "Color 600 film",
   "item.polaroid600.film_600_bw": "B&W 600 film",
   "item.polaroid600.film_600_blue": "Reclaimed Blue 600 film",
@@ -15,6 +16,8 @@
   "item.polaroid600.photo": "Photo",
 
   "item.polaroid600.film_cartridge": "Film Cartridge",
+  "item.polaroid600.camera_tripod" : "Camera Tripod",
+
   "item.polaroid600.blue_light_sensitive_layer": "Blue Light Sensitive Layer",
   "item.polaroid600.red_light_sensitive_layer": "Red Light Sensitive Layer",
   "item.polaroid600.green_light_sensitive_layer": "Green Light Sensitive Layer",
@@ -29,6 +32,8 @@
   "item.polaroid600.color_negative": "Color Negative",
   "item.polaroid600.darkslide": "Darkslide",
 
+  "entity.polaroid600.camera_tripod" : "Camera Tripod",
+
   "subtitle.camera.shutter": "Camera Shutter",
 
   "key.category.polaroid600.camera": "Polaroid600 Camera Controls",
@@ -41,6 +46,24 @@
   "polaroid600.configuration.title": "Polaroid 600 Configs",
   "polaroid600.configuration.section.polaroid600.common.toml": "Polaroid 600 Configs",
   "polaroid600.configuration.section.polaroid600.common.toml.title": "Polaroid 600 Configs",
+  "polaroid600.configuration.film": "Film Config",
+  "polaroid600.configuration.developmentTime": "Development Time",
+  "polaroid600.configuration.solarizationTime": "Solarization Time",
+  "polaroid600.configuration.solarizationEnabled": "Solarization Enabled",
+  "polaroid600.configuration.camera": "Camera Config",
+  "polaroid600.configuration.filmMode": "Film Mode",
+  "polaroid600.configuration.redstone": "Redstone Integration",
+  "polaroid600.configuration.selfieMirror": "Selfie Mirror Config",
+  "polaroid600.configuration.photo": "Photo Config",
+  "polaroid600.configuration.misc": "Misc Config",
+  "polaroid600.configuration.customMarkerFont": "Custom Marker Font",
+  "polaroid600.configuration.darkslidesInCreativeTab": "Darkslides in Creative Tab",
+  "polaroid600.configuration.selfieMirrorAllowed": "Selfie Mirror Allowed",
+  "polaroid600.configuration.selfieMirrorResolution": "Selfie Mirror Resolution",
+  "polaroid600.configuration.selfieMirrorUpdatePeriod": "Selfie Mirror Update Period",
+
+
+
   "exposure_adjustment.message": "Exposure Adjustment: %d",
   "double_exposure.off.message": "Double exposure turned off",
   "double_exposure.on.message": "Double exposure turned on",

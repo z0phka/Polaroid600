@@ -113,7 +113,7 @@ float getBlurSize(float depth, float focusPoint)
 {
     float coc = circleOfConfusion(focusPoint, depth,APERTURE, FOCAL_LENGTH);
     if (depth > focusPoint && AF == 0) {
-        coc *= 0.66;
+        //coc *= 0.66;
     }
 
 	return coc * MAX_BLUR_SIZE * BLUR_FACTOR;

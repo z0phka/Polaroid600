@@ -163,7 +163,7 @@ public class ClientPhotoTaker {
 
     //TODO: Fix LevelToTargetRenderer and switch to using it
     private void processScheduledPhoto(ScheduledPhoto scheduledPhoto) {
-        if (this.minecraft.levelExtractor.countRenderedSections() > 10 && this.minecraft.levelRenderer.hasRenderedAllSections()) {
+        if (this.minecraft.levelRenderer.hasRenderedAllSections()) {
             ItemStack cameraStack = scheduledPhoto.cameraStack;
             CameraItem cameraItem = (CameraItem)cameraStack.getItem();
 

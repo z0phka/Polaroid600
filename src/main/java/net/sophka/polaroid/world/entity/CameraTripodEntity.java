@@ -19,6 +19,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -33,6 +34,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.config.ServerConfig;
+import net.sophka.polaroid.init.ModItems;
 import net.sophka.polaroid.init.ModSounds;
 import net.sophka.polaroid.server.photo.ServerPhotoTaker;
 import net.sophka.polaroid.world.item.CameraItem;
@@ -375,7 +377,7 @@ public class CameraTripodEntity extends LivingEntity {
     }
 
     private void brokenByPlayer(ServerLevel level, DamageSource source) {
-        ItemStack result = new ItemStack(Items.ARMOR_STAND);
+        ItemStack result = new ItemStack(ModItems.CAMERA_TRIPOD.get());
         result.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         Block.popResource(this.level(), this.blockPosition(), result);
         this.brokenByAnything(level, source);
@@ -385,11 +387,15 @@ public class CameraTripodEntity extends LivingEntity {
         this.playBrokenSound();
         this.dropAllDeathLoot(level, source);
 
-        for (EquipmentSlot slot : EquipmentSlot.VALUES) {
-            ItemStack itemStack = this.equipment.set(slot, ItemStack.EMPTY);
-            if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
-                Block.popResource(this.level(), this.blockPosition().above(), itemStack);
-            }
+        ItemStack camera = this.getCamera();
+        ItemStack photo = this.getPhoto();
+
+        if (!camera.isEmpty() && !EnchantmentHelper.has(camera, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            Block.popResource(this.level(), this.blockPosition().above(), camera);
+        }
+
+        if (!photo.isEmpty() && !EnchantmentHelper.has(photo, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+            Block.popResource(this.level(), this.blockPosition().above(), photo);
         }
     }
     private void causeDamage(ServerLevel level, DamageSource source, float dmg) {

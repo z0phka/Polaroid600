@@ -3,7 +3,7 @@
   "transformations" : [
     {
       "type" : "polaroid600:grain",
-      "strength" : 0.03125
+      "strength" : 0.0234375
     },
     {
       "type" : "polaroid600:aberration",
@@ -16,9 +16,9 @@
     },
     {
       "type" : "polaroid600:power_color",
-      "red" : 1.5,
-      "green" : 1.5,
-      "blue" : 1.5
+      "red" : 1.6,
+      "green" : 1.6,
+      "blue" : 1.6
     },
     {
       "type" : "polaroid600:halation"
@@ -40,6 +40,12 @@
       "red" : 0.4,
       "green" : 1,
       "blue" : 1.4
+    },
+    {
+      "type" : "polaroid600:power_color",
+      "red" : 1.2,
+      "green" : 1.2,
+      "blue" : 1.2
     },
     {
       "type" : "polaroid600:vignette",

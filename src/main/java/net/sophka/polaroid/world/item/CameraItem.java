@@ -141,7 +141,6 @@ public class CameraItem extends Item {
         }
     }
 
-    public static int MAX_SLIDES = 10;
     public static int EXPOSURE_DELTA = 4;
     private static final int BAR_COLOR = ARGB.colorFromFloat(1.0F, 0.44F, 0.53F, 1.0F);
 

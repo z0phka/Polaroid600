@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "minecraft:prismarine_crystals",
+    "P": "minecraft:paper",
+    "T": "minecraft:bone_meal"
+  },
+  "pattern": [
+    "TCT",
+    "CPC",
+    "TCT"
+  ],
+  "result": {
+    "id": "polaroid600:green_light_sensitive_layer",
+    "count": 4
+  }
+}

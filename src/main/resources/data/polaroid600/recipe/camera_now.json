@@ -2,7 +2,6 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "R": "minecraft:resin_brick",
     "S": "minecraft:spyglass",
     "G": "minecraft:redstone_lamp",
     "C": "minecraft:copper_ingot",
@@ -10,10 +9,11 @@
     "L": "minecraft:daylight_detector",
     "B": "minecraft:stone_button",
     "D": "minecraft:redstone",
-    "E": "minecraft:prismarine_shard"
+    "E": "minecraft:echo_shard",
+    "W": "minecraft:prismarine_shard"
   },
   "pattern": [
-    "RSG",
+    "WSG",
     "EPL",
     "BCD"
   ],
