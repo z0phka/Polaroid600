@@ -3,16 +3,13 @@ package net.sophka.polaroid.event;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.init.ModEntityTypes;
-import net.sophka.polaroid.world.entity.CameraTripodEntity;
 import net.sophka.polaroid.world.item.CameraItem;
 
 @EventBusSubscriber(modid = Polaroid600.MODID)
@@ -30,7 +27,8 @@ public class ModEventHandler {
 
     @SubscribeEvent
     public static void onInteractEntitySpecific(PlayerInteractEvent.EntityInteractSpecific event){
-        if(event.getEntity().getActiveItem().getItem() instanceof CameraItem && !(event.getTarget() instanceof CameraTripodEntity)){
+        ItemStack stack = event.getEntity().getActiveItem();
+        if(stack.getItem() instanceof CameraItem && !CameraItem.permitInteraction(stack, event.getHand(), event.getTarget())){
             event.setCancellationResult(InteractionResult.PASS);
             event.setCanceled(true);
         }
@@ -38,7 +36,8 @@ public class ModEventHandler {
 
     @SubscribeEvent
     public static void onInteractEntity(PlayerInteractEvent.EntityInteract event){
-        if(event.getEntity().getActiveItem().getItem() instanceof CameraItem && !(event.getTarget() instanceof CameraTripodEntity)){
+        ItemStack stack = event.getEntity().getActiveItem();
+        if(stack.getItem() instanceof CameraItem && !CameraItem.permitInteraction(stack, event.getHand(), event.getTarget())){
             event.setCancellationResult(InteractionResult.PASS);
             event.setCanceled(true);
         }

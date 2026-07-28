@@ -216,6 +216,7 @@ public class ServerPayloadHandler {
         switch (data.toggleType()){
             case DOUBLE_EXPOSURE -> doubleExposureToggle(data, context);
             case AF -> autofocusToggle(data, context);
+            case FLASH -> flashToggle(data, context);
         }
     }
 
@@ -255,6 +256,22 @@ public class ServerPayloadHandler {
             boolean state = stack.getOrDefault(ModDataComponents.AF,false);
             player.sendOverlayMessage(Component.translatable(state ? "autofocus.off.message" : "autofocus.on.message"));
             stack.set(ModDataComponents.AF,!state);
+            level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.3F,
+                    1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+        });
+    }
+
+    public static void flashToggle(final CameraTogglePayload data, final IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+            Level level = player.level();
+            ItemStack stack = player.getActiveItem();
+            if (!(stack.getItem() instanceof CameraItem cameraItem) || cameraItem.cameraProperties.getFlashMode() != CameraItem.CameraProperties.FlashMode.OPTIONAL) {
+                return;
+            }
+            boolean state = stack.getOrDefault(ModDataComponents.FLASH,false);
+            player.sendOverlayMessage(Component.translatable(state ? "flash.off.message" : "flash.on.message"));
+            stack.set(ModDataComponents.FLASH,!state);
             level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.3F,
                     1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
         });

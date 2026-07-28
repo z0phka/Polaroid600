@@ -10,7 +10,6 @@ import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.utils.Utils;
 import net.sophka.polaroid.world.item.FilmFormat;
-import net.sophka.polaroid.world.item.FilmType;
 
 import java.io.IOException;
 

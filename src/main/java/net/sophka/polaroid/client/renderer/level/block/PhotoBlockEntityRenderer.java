@@ -7,22 +7,16 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.blockentity.state.ShelfRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ShelfBlock;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.renderer.PhotoRenderer;
 import net.sophka.polaroid.world.block.entity.PhotoBlockEntity;
 
 import javax.annotation.Nullable;
-import java.util.stream.Collectors;
 
 public class PhotoBlockEntityRenderer implements BlockEntityRenderer<PhotoBlockEntity, PhotoBlockEntityRenderState> {
 

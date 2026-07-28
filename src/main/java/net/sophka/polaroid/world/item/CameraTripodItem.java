@@ -9,9 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.PostSpawnProcessor;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -21,7 +19,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.sophka.polaroid.init.ModEntityTypes;
-import net.sophka.polaroid.world.entity.CameraTripodEntity;
+import net.sophka.polaroid.world.entity.tripod.CameraTripodEntity;
 
 public class CameraTripodItem extends Item {
     public CameraTripodItem(Properties properties) {

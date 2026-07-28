@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickAction;
@@ -23,12 +24,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
+import net.sophka.polaroid.config.ClientConfig;
 import net.sophka.polaroid.config.FilmMode;
 import net.sophka.polaroid.config.ServerConfig;
 import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.init.ModItems;
 import net.sophka.polaroid.server.photo.ServerPhotoTaker;
+import net.sophka.polaroid.world.entity.tripod.CameraTripodEntity;
+import net.sophka.polaroid.world.entity.tripod.TripodCameraPartEntity;
 import net.sophka.polaroid.world.item.component.CameraCartridge;
 import net.sophka.polaroid.world.item.component.FilmContent;
 import org.jspecify.annotations.Nullable;
@@ -108,6 +112,15 @@ public class CameraItem extends Item {
             return this;
         }
 
+        public CameraProperties withFlash(){
+            return withFlashMode(FlashMode.OPTIONAL);
+        }
+
+        public CameraProperties withFlashMode(FlashMode flashMode){
+            this.flashMode = flashMode;
+            return this;
+        }
+
         public float getFov() {
             return fov;
         }
@@ -147,7 +160,12 @@ public class CameraItem extends Item {
     public final CameraProperties cameraProperties;
 
     public CameraItem(Properties properties, CameraProperties cameraProperties) {
-        super(properties.component(ModDataComponents.FILM_CONTENT, FilmContent.EMPTY).component(ModDataComponents.EXPOSURE,0).component(ModDataComponents.CAMERA_CARTRIDGE,CameraCartridge.EMPTY).component(ModDataComponents.INITIALIZED, false));
+        super(properties
+                .component(ModDataComponents.FILM_CONTENT, FilmContent.EMPTY)
+                .component(ModDataComponents.EXPOSURE,0)
+                .component(ModDataComponents.CAMERA_CARTRIDGE,CameraCartridge.EMPTY)
+                .component(ModDataComponents.FLASH, false)
+                .component(ModDataComponents.INITIALIZED, false));
         this.cameraProperties = cameraProperties;
     }
 
@@ -250,7 +268,7 @@ public class CameraItem extends Item {
             if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
                 contents.tryInsert(other);
                 self.set(ModDataComponents.CAMERA_CARTRIDGE.get(), contents.toImmutable());
-                if(contents.filmCount() >= 8){
+                if(contents.filmCount() >= 8 && (!player.isCreative() || ClientConfig.DARKSLIDES_IN_CREATIVE_MODE.get()) && ServerConfig.DARKSLIDE_EJECTION.get()){
                     List<Identifier> darkslides = DarkslideManager.INSTANCE.darkslideIdentifiers();
                     if(!darkslides.isEmpty()){
                         //TODO: Send packet because Mojang does not like consistency
@@ -328,6 +346,14 @@ public class CameraItem extends Item {
             return Component.translatable(getDescriptionId() + ".land");
         }
         return super.getName(stack);
+    }
+
+    public boolean useFlash(ItemStack stack){
+        return cameraProperties.getFlashMode() == CameraProperties.FlashMode.ALWAYS || (cameraProperties.getFlashMode() == CameraProperties.FlashMode.OPTIONAL && stack.getOrDefault(ModDataComponents.FLASH, false));
+    }
+
+    public static boolean permitInteraction(ItemStack stack, InteractionHand hand, Entity entity){
+        return (entity instanceof TripodCameraPartEntity || entity instanceof CameraTripodEntity || entity instanceof ItemFrame);
     }
 
 }

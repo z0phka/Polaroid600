@@ -1,9 +1,10 @@
-package net.sophka.polaroid.world.entity;
+package net.sophka.polaroid.world.entity.tripod;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -19,9 +20,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.PartEntity;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.config.ServerConfig;
 import net.sophka.polaroid.init.ModItems;
@@ -53,8 +53,11 @@ public class CameraTripodEntity extends LivingEntity {
     private boolean poweredPrev = false;
     public long lastHit;
 
+    private final TripodCameraPartEntity cameraPartEntity;
+
     public CameraTripodEntity(EntityType<? extends CameraTripodEntity> type, Level level) {
         super(type, level);
+        this.cameraPartEntity = new TripodCameraPartEntity(this);
     }
 
     @Override
@@ -121,6 +124,21 @@ public class CameraTripodEntity extends LivingEntity {
         }
     }
 
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        Vec3 cameraPosOld = position();
+
+        Vec3 cameraPos = position().add(0,getBbHeight(),0);
+        cameraPartEntity.setPos(cameraPos);
+        cameraPartEntity.xOld = cameraPosOld.x();
+        cameraPartEntity.yOld = cameraPosOld.y();
+        cameraPartEntity.zOld = cameraPosOld.z();
+        cameraPartEntity.xo = cameraPosOld.x();
+        cameraPartEntity.yo = cameraPosOld.y();
+        cameraPartEntity.zo = cameraPosOld.z();
+    }
+
     public boolean canShoot() {
         if (!getPhoto().isEmpty()) {
             return false;
@@ -175,12 +193,13 @@ public class CameraTripodEntity extends LivingEntity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        Polaroid600.LOGGER.debug("{} {}", location, level().isClientSide());
         ItemStack itemStack = player.getItemInHand(hand);
         ItemStack cameraStack = getCamera();
         ItemStack photoStack = getPhoto();
 
-        boolean clickedHead = location.y > 1.18;
-        boolean clickedCamera = location.y > 1.4;
+        boolean clickedHead = location.y > 17/16f;
+        boolean clickedCamera = location.y > this.getBbHeight();
 
         Polaroid600.LOGGER.debug("vec {} {} {}", location, clickedHead, clickedCamera);
 
@@ -443,4 +462,24 @@ public class CameraTripodEntity extends LivingEntity {
         }
     }
 
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    @Nullable
+    public PartEntity<?>[] getParts() {
+        return new PartEntity[]{this.cameraPartEntity};
+    }
+
+    @Override
+    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+        super.recreateFromPacket(packet);
+        PartEntity[] subEntities = this.getParts();
+
+        for (int i = 0; i < subEntities.length; i++) {
+            subEntities[i].setId(i + packet.getId() + 1);
+        }
+    }
 }

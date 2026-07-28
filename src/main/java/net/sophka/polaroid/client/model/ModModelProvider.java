@@ -29,10 +29,10 @@ public class ModModelProvider extends ModelProvider {
                 ModItems.PHOTO.get(),
                 new SelectItemModel.Unbaked(
                         Optional.empty(),
-                        new SelectItemModel.UnbakedSwitch(
+                        new SelectItemModel.UnbakedSwitch<>(
                                 new FilmTypeProperty(),
                                 List.of(
-                                        new SelectItemModel.SwitchCase(
+                                        new SelectItemModel.SwitchCase<>(
                                                 List.of(FilmType.COLOR),
                                                 new CuboidItemModelWrapper.Unbaked(
                                                         Identifier.fromNamespaceAndPath(Polaroid600.MODID, "item/photo_600_color"),
@@ -40,7 +40,7 @@ public class ModModelProvider extends ModelProvider {
                                                         Collections.emptyList()
                                                 )
                                         ),
-                                        new SelectItemModel.SwitchCase(
+                                        new SelectItemModel.SwitchCase<>(
                                                 List.of(FilmType.BW),
                                                 new CuboidItemModelWrapper.Unbaked(
                                                         Identifier.fromNamespaceAndPath(Polaroid600.MODID, "item/photo_600_bw"),
@@ -48,7 +48,7 @@ public class ModModelProvider extends ModelProvider {
                                                         Collections.emptyList()
                                                 )
                                         ),
-                                        new SelectItemModel.SwitchCase(
+                                        new SelectItemModel.SwitchCase<>(
                                                 List.of(FilmType.BLUE),
                                                 new CuboidItemModelWrapper.Unbaked(
                                                         Identifier.fromNamespaceAndPath(Polaroid600.MODID, "item/photo_600_blue"),
@@ -56,7 +56,7 @@ public class ModModelProvider extends ModelProvider {
                                                         Collections.emptyList()
                                                 )
                                         ),
-                                        new SelectItemModel.SwitchCase(
+                                        new SelectItemModel.SwitchCase<>(
                                                 List.of(FilmType.GREEN),
                                                 new CuboidItemModelWrapper.Unbaked(
                                                         Identifier.fromNamespaceAndPath(Polaroid600.MODID, "item/photo_600_green"),
@@ -64,7 +64,7 @@ public class ModModelProvider extends ModelProvider {
                                                         Collections.emptyList()
                                                 )
                                         ),
-                                        new SelectItemModel.SwitchCase(
+                                        new SelectItemModel.SwitchCase<>(
                                                 List.of(FilmType.PURPLE),
                                                 new CuboidItemModelWrapper.Unbaked(
                                                         Identifier.fromNamespaceAndPath(Polaroid600.MODID, "item/photo_600_purple"),

@@ -1,34 +1,17 @@
 package net.sophka.polaroid.client.renderer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FontDescription;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
-import net.minecraft.world.entity.Display;
 import net.minecraft.world.item.ItemStack;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.config.ClientConfig;
 import net.sophka.polaroid.data.darkslide.Darkslide;
 import net.sophka.polaroid.data.darkslide.DarkslideManager;
-import net.sophka.polaroid.data.darkslide.DarkslideSeries;
 import net.sophka.polaroid.init.ModDataComponents;
-import net.sophka.polaroid.utils.Utils;
-import net.sophka.polaroid.world.item.FilmFormat;
-import net.sophka.polaroid.world.item.PhotoItem;
-
-import java.util.Optional;
 
 public class DarkslideRenderer {
     public record Frame(Identifier identifier, RenderType frameRenderType, int frameWidth, int frameHeight) {
@@ -115,7 +98,7 @@ public class DarkslideRenderer {
         graphics.pose().translate(x,y);
         graphics.pose().scale(scale);
         for(String line : text.split("\n")){
-            graphics.text(minecraft.font, line, 0, 0 + minecraft.font.lineHeight * n, color, false);
+            graphics.text(minecraft.font, line, 0, minecraft.font.lineHeight * n, color, false);
             n++;
         }
         graphics.pose().popMatrix();

@@ -6,6 +6,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.textures.GpuTextureView;
 import net.minecraft.client.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
@@ -15,6 +17,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.ClientState;
+import net.sophka.polaroid.config.ClientConfig;
 import net.sophka.polaroid.data.film.*;
 import net.sophka.polaroid.data.film.transformations.ExposureAdjustmentTransformation;
 import net.sophka.polaroid.data.film.transformations.LinearColorTransformation;
@@ -29,14 +32,35 @@ import net.sophka.polaroid.world.item.component.FilmContent;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 
 public class ClientPhotoTaker {
     private record ScheduledPhoto(ItemStack cameraStack, FilmItem filmItem, int exposureAdjustment,
-                                  @Nullable CameraViewEntity cameraViewEntity, int token) {
+                                  @Nullable CameraViewEntity cameraViewEntity, @Nullable FlashPos flashPos,  long timeStamp, int token) {
+    }
+
+    public static class FlashPos{
+        public BlockPos blockPos;
+        public long timeStamp;
+        public boolean dirty;
+        public boolean removed;
+
+        public FlashPos(BlockPos pos, long timeStamp){
+            this.blockPos = pos;
+            this.timeStamp = timeStamp;
+            this.dirty = true;
+        }
+
+        public SectionPos sectionPos(){
+            return SectionPos.of(blockPos);
+        }
     }
 
     public enum State {
@@ -50,7 +74,7 @@ public class ClientPhotoTaker {
     private float fov;
     private State state = State.IDLE;
     private boolean autofocus;
-    private ConcurrentLinkedQueue<ScheduledPhoto> scheduledPhotos = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<ScheduledPhoto> scheduledPhotos = new ConcurrentLinkedQueue<>();
 
     public static final Identifier dofEffect = Identifier.fromNamespaceAndPath(Polaroid600.MODID, "dof");
     public static final Identifier dofAutofocusEffect = Identifier.fromNamespaceAndPath(Polaroid600.MODID, "dof_af");
@@ -60,6 +84,8 @@ public class ClientPhotoTaker {
     private GpuTextureView vanillaColorTextureView;
     private GpuTexture vanillaDepthTexture;
     private GpuTextureView vanillaDepthTextureView;
+
+    private final CopyOnWriteArraySet<FlashPos> flashes = new CopyOnWriteArraySet<>();
 
 
     private ClientPhotoTaker(Minecraft minecraft) {
@@ -88,25 +114,45 @@ public class ClientPhotoTaker {
             return;
         }
         int exposureAdjustment = cameraStack.getOrDefault(ModDataComponents.EXPOSURE, 0);
-        schedulePhoto(new ScheduledPhoto(cameraStack, filmItem, exposureAdjustment, view, token));
+        long timeStamp = minecraft.level.getGameTime();
+
+        FlashPos flashPos = null;
+        if(ClientConfig.FLASH_ENABLED.isTrue() && cameraItem.useFlash(cameraStack)){
+            flashPos = new FlashPos((view == null ? minecraft.player : view).blockPosition(), timeStamp);
+            this.flashes.add(flashPos);
+        }
+        schedulePhoto(new ScheduledPhoto(cameraStack, filmItem, exposureAdjustment, view, flashPos, timeStamp, token));
+    }
+
+    public void handleFlash() {
+        Set<FlashPos> dirty = new HashSet<>();
+        for(FlashPos flashPos : flashes){
+            if(minecraft.level.getGameTime() - flashPos.timeStamp > 20){
+                flashPos.removed = true;
+            }
+            if(flashPos.dirty || flashPos.removed){
+                dirty.add(flashPos);
+            }
+            flashPos.dirty = false;
+        }
+        flashes.removeAll(dirty.stream().filter(flashPos -> flashPos.removed).collect(Collectors.toUnmodifiableSet()));
+        if(ClientConfig.FLASH_ENABLED.isFalse()){
+            return;
+        }
+        dirty.stream().map(FlashPos::sectionPos).forEach(pos -> minecraft.level.setSectionDirtyWithNeighbors(pos.x(), pos.y(), pos.z()));
     }
 
     public void process() {
-        ScheduledPhoto scheduledPhoto = scheduledPhotos.poll();
-        if (scheduledPhoto == null) {
-            return;
+        ScheduledPhoto scheduledPhoto = scheduledPhotos.peek();
+        if (scheduledPhoto != null && processScheduledPhoto(scheduledPhoto)) {
+            scheduledPhotos.remove(scheduledPhoto);
         }
-        processScheduledPhoto(scheduledPhoto);
     }
 
     private void processRender(RenderTarget renderTarget, ScheduledPhoto scheduledPhoto) {
-        Polaroid600.LOGGER.debug("processRender");
         Screenshot.takeScreenshot(renderTarget,
                 screenshot -> {
-                    Polaroid600.LOGGER.debug("takeScreenshot");
                     Util.ioPool().execute(() -> {
-                        Polaroid600.LOGGER.debug("ioPool");
-                        Polaroid600.LOGGER.debug("queueFencedTask");
                         CameraItem cameraItem = (CameraItem) scheduledPhoto.cameraStack().getItem();
                         FilmItem filmItem = scheduledPhoto.filmItem();
                         int exposureAdjustment = scheduledPhoto.exposureAdjustment();
@@ -114,7 +160,6 @@ public class ClientPhotoTaker {
                         FilmFormat format = cameraItem.cameraProperties.getFilmFormat();
 
                         try (NativeImage scaled = new NativeImage(format.width, format.height, false)) {
-                            //screenshot.resizeSubRectTo(x, y, width, height, scaled);
                             cropAndResize(screenshot, scaled);
                             TransformableImage transformableImage = new TransformableImage(scaled);
                             Optional<FilmData> filmData = FilmDataManager.INSTANCE.get(BuiltInRegistries.ITEM.getKey(filmItem));
@@ -150,11 +195,11 @@ public class ClientPhotoTaker {
 
         if (targetAspectRatio > srcAspectAspectRatio) {
             width = src.getWidth();
-            height = (int)Math.round(src.getWidth() / targetAspectRatio);
+            height = (int) Math.round(src.getWidth() / targetAspectRatio);
             y = (src.getHeight() - height) / 2;
         } else {
             height = src.getHeight();
-            width = (int)Math.round(src.getHeight() * targetAspectRatio);
+            width = (int) Math.round(src.getHeight() * targetAspectRatio);
             x = (src.getWidth() - width) / 2;
         }
         src.resizeSubRectTo(x, y, width, height, dst);
@@ -162,63 +207,75 @@ public class ClientPhotoTaker {
     }
 
     //TODO: Fix LevelToTargetRenderer and switch to using it
-    private void processScheduledPhoto(ScheduledPhoto scheduledPhoto) {
-        if (this.minecraft.levelRenderer.hasRenderedAllSections()) {
-            ItemStack cameraStack = scheduledPhoto.cameraStack;
-            CameraItem cameraItem = (CameraItem)cameraStack.getItem();
-
-            this.fov = cameraItem.getFov() * (ClientState.selfieMode ? 2 : 1);
-            this.autofocus = cameraItem.cameraProperties.hasAF() && cameraStack.getOrDefault(ModDataComponents.AF,false);
-            boolean selfie = ClientState.selfieMode;
-            boolean guiHidden = this.minecraft.gui.hud.isHidden();
-            Entity cameraEntity = minecraft.getCameraEntity();
-            CameraType cameraType = minecraft.options.getCameraType();
-            Camera camera = minecraft.gameRenderer.mainCamera();
-            Vec3 oldCameraPos = camera.position();
-            float oldRotX = camera.xRot();
-            float oldRotY = camera.yRot();
-            float oldRoll = camera.getRoll();
-
-            CameraViewEntity cameraViewEntity = null;
-            if (scheduledPhoto.cameraViewEntity != null) {
-                cameraViewEntity = scheduledPhoto.cameraViewEntity;
-            } else if (selfie) {
-                cameraViewEntity = ClientState.selfieViewEntity();
-            }
-
-            if (cameraViewEntity != null) {
-                camera.setEntity(cameraViewEntity);
-                camera.eyeHeight = cameraViewEntity.getEyeHeight();
-                camera.eyeHeightOld = cameraViewEntity.getEyeHeight();
-                camera.setPosition(cameraViewEntity.getX(), cameraViewEntity.getY(), cameraViewEntity.getZ());
-            }
-
-            if (!this.minecraft.gui.hud.isHidden()) {
-                this.minecraft.gui.hud.toggle();
-            }
-            minecraft.options.setCameraType(CameraType.FIRST_PERSON);
-            hijackRenderTarget();
-            state = State.TAKING_PHOTO;
-            minecraft.gameRenderer.update(DeltaTracker.ONE);
-            minecraft.gameRenderer.extract(DeltaTracker.ONE, true);
-            minecraft.gameRenderer.render(DeltaTracker.ONE, true);
-            state = State.IDLE;
-            minecraft.options.setCameraType(cameraType);
-            if (this.minecraft.gui.hud.isHidden() != guiHidden) {
-                this.minecraft.gui.hud.toggle();
-            }
-
-
-            if (cameraViewEntity != null) {
-                camera.setEntity(cameraEntity);
-                camera.eyeHeight = cameraEntity.getEyeHeight();
-                camera.eyeHeightOld = cameraEntity.getEyeHeight();
-                camera.setPosition(oldCameraPos.x, oldCameraPos.y, oldCameraPos.z);
-                camera.setRotation(oldRotY, oldRotX, oldRoll);
-            }
-
-            processRender(cameraRenderTarget, scheduledPhoto);
+    private boolean processScheduledPhoto(ScheduledPhoto scheduledPhoto) {
+        if(minecraft.level.getGameTime() - scheduledPhoto.timeStamp < 2){
+            return false;
         }
+        ItemStack cameraStack = scheduledPhoto.cameraStack;
+        CameraItem cameraItem = (CameraItem) cameraStack.getItem();
+
+        this.fov = cameraItem.getFov() * (ClientState.selfieMode ? 2 : 1);
+        this.autofocus = cameraItem.cameraProperties.hasAF() && cameraStack.getOrDefault(ModDataComponents.AF, false);
+        boolean selfie = ClientState.selfieMode;
+        boolean guiHidden = this.minecraft.gui.hud.isHidden();
+        Entity cameraEntity = minecraft.getCameraEntity();
+        CameraType cameraType = minecraft.options.getCameraType();
+        Camera camera = minecraft.gameRenderer.mainCamera();
+        Vec3 oldCameraPos = camera.position();
+        float oldRotX = camera.xRot();
+        float oldRotY = camera.yRot();
+        float oldRoll = camera.getRoll();
+        DeltaTracker deltaTracker = minecraft.getDeltaTracker();
+
+        CameraViewEntity cameraViewEntity = null;
+        if (scheduledPhoto.cameraViewEntity != null) {
+            cameraViewEntity = scheduledPhoto.cameraViewEntity;
+        } else if (selfie) {
+            cameraViewEntity = ClientState.selfieViewEntity();
+        }
+
+        if (cameraViewEntity != null) {
+            camera.setEntity(cameraViewEntity);
+            camera.eyeHeight = cameraViewEntity.getEyeHeight();
+            camera.eyeHeightOld = cameraViewEntity.getEyeHeight();
+            camera.setPosition(cameraViewEntity.getX(), cameraViewEntity.getY(), cameraViewEntity.getZ());
+        }
+
+        if (!this.minecraft.gui.hud.isHidden()) {
+            this.minecraft.gui.hud.toggle();
+        }
+        minecraft.options.setCameraType(CameraType.FIRST_PERSON);
+        hijackRenderTarget();
+        state = State.TAKING_PHOTO;
+
+        SectionPos sectionPos = SectionPos.of(cameraEntity);
+
+
+        minecraft.gameRenderer.update(DeltaTracker.ONE);
+        minecraft.gameRenderer.extract(DeltaTracker.ONE, true);
+        minecraft.gameRenderer.render(deltaTracker, true);
+
+        state = State.IDLE;
+
+        minecraft.options.setCameraType(cameraType);
+        if (this.minecraft.gui.hud.isHidden() != guiHidden) {
+            this.minecraft.gui.hud.toggle();
+        }
+
+
+        if (cameraViewEntity != null) {
+            camera.setEntity(cameraEntity);
+            camera.eyeHeight = cameraEntity.getEyeHeight();
+            camera.eyeHeightOld = cameraEntity.getEyeHeight();
+            camera.setPosition(oldCameraPos.x, oldCameraPos.y, oldCameraPos.z);
+            camera.setRotation(oldRotY, oldRotX, oldRoll);
+        }
+
+        processRender(cameraRenderTarget, scheduledPhoto);
+        if(scheduledPhoto.flashPos != null){
+            scheduledPhoto.flashPos.removed = true;
+        }
+        return true;
     }
 
     public void hijackRenderTarget() {
@@ -251,7 +308,17 @@ public class ClientPhotoTaker {
         return this.fov;
     }
 
-    public boolean getAutofocus(){
+    public boolean getAutofocus() {
         return this.autofocus;
+    }
+
+    public Set<FlashPos> flashPositions() {
+        return this.flashes;
+    }
+
+    public int flashIntensityAt(BlockPos pos){
+        double flashRangeSqr = ClientConfig.FLASH_RANGE.get() * ClientConfig.FLASH_RANGE.get();
+        return flashPositions().stream().mapToDouble(flashPos -> pos.distToCenterSqr(flashPos.blockPos.getX(), flashPos.blockPos.getY(), flashPos.blockPos.getZ()))
+                .map(dist -> ClientConfig.FLASH_STRENGTH.get() * (1 - (Math.clamp(dist, 0, flashRangeSqr) / flashRangeSqr))).mapToLong(Math::round).mapToInt(i -> (int)i).max().orElse(0);
     }
 }

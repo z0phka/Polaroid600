@@ -4,7 +4,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.world.entity.CameraTripodEntity;
+import net.sophka.polaroid.world.entity.tripod.CameraTripodEntity;
 import net.sophka.polaroid.world.entity.CameraViewEntity;
 
 import java.util.function.Supplier;
@@ -18,6 +18,6 @@ public class ModEntityTypes {
 
     public static final Supplier<EntityType<CameraTripodEntity>> CAMERA_TRIPOD = ENTITY_TYPES.registerEntityType(
             "camera_tripod", CameraTripodEntity::new, MobCategory.MISC,
-            builder -> builder.sized(0.75f, 1.625f).eyeHeight(1.45f));
+            builder -> builder.sized(0.5f, 1.3125f).eyeHeight(1.45f));
 
 }

@@ -24,7 +24,6 @@ public class ClientPayloadHandler {
     }
 
     public static void handlePhotoCaptureRequest(final PhotoCaptureRequestPayload request, final IPayloadContext context) {
-        Polaroid600.LOGGER.debug("MEANT TO TAKE A PHOTO HERE :3");
         context.enqueueWork(() -> {
             CameraViewEntity cameraViewEntity = null;
             if(!request.firstPerson()){

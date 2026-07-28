@@ -85,4 +85,10 @@ public class ModDataComponents {
             builder -> builder
                     .persistent(Codec.BOOL)
                     .networkSynchronized(ByteBufCodecs.BOOL));
+
+    public static final Supplier<DataComponentType<Boolean>> FLASH = DATA_COMPONENTS.registerComponentType(
+            "flash",
+            builder -> builder
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL));
 }

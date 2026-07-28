@@ -1,6 +1,5 @@
 package net.sophka.polaroid.world.block;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -12,7 +11,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -22,10 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.SideChainPart;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -124,20 +119,15 @@ public class PhotoBlock extends Block implements EntityBlock, SelectableSlotCont
     ) {
         if (level.getBlockEntity(pos) instanceof PhotoBlockEntity photoBlockEntity && !hand.equals(InteractionHand.OFF_HAND)) {
             OptionalInt hitSlot = this.getHitSlot(hitResult, state.getValue(FACING));
-            Polaroid600.LOGGER.debug(String.valueOf(hitSlot.orElse(-1)));
             if (hitSlot.isEmpty()) {
                 return InteractionResult.PASS;
             } else {
                 if(player.isCrouching()){
-                    ItemStack stack = photoBlockEntity.getItem(hitSlot.getAsInt());
-                    if(level.isClientSide() && !stack.isEmpty() && stack.getItem() instanceof PhotoItem){
-                        Minecraft.getInstance().setScreenAndShow(new PhotoScreen(stack));
-                    }
                     return InteractionResult.PASS;
                 }
                 Inventory inventory = player.getInventory();
                 if (level.isClientSide()) {
-                    return (InteractionResult)(inventory.getSelectedItem().isEmpty() ? InteractionResult.PASS : InteractionResult.SUCCESS);
+                    return inventory.getSelectedItem().isEmpty() ? InteractionResult.PASS : InteractionResult.SUCCESS;
                 } else {
                     boolean itemRemoved = swapSingleItem(itemStack, player, photoBlockEntity, hitSlot.getAsInt(), inventory);
                     if (itemRemoved) {

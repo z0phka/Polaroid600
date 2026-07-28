@@ -8,8 +8,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
-import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
-import net.sophka.polaroid.world.item.FilmType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -30,7 +28,7 @@ public class Darkslide{
         this.type = type;
     }
 
-    public static Codec<Darkslide> CODEC = RecordCodecBuilder.create(instance ->
+    public static final Codec<Darkslide> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.STRING.fieldOf("id").forGetter(Darkslide::identifier),
                     Codec.STRING.optionalFieldOf("text", "").forGetter(Darkslide::text),
@@ -38,7 +36,7 @@ public class Darkslide{
                     Type.COODEC.optionalFieldOf("type", Type.TEXT_ONLY).forGetter(Darkslide::type)
             ).apply(instance, Darkslide::new));
 
-    public static StreamCodec<ByteBuf, Darkslide> STREAM_CODEC = StreamCodec
+    public static final StreamCodec<ByteBuf, Darkslide> STREAM_CODEC = StreamCodec
             .composite(ByteBufCodecs.STRING_UTF8,
                     Darkslide::identifier,
                     ByteBufCodecs.STRING_UTF8,

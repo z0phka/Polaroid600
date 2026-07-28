@@ -7,7 +7,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.sophka.polaroid.client.ClientState;
-import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
 import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.ModItemDisplayContexts;
 import org.spongepowered.asm.mixin.Mixin;

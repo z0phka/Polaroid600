@@ -11,10 +11,10 @@ import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.renderer.CameraInHandRenderer;
 import net.sophka.polaroid.client.renderer.PhotoInHandRenderer;
 import net.sophka.polaroid.world.item.CameraItem;
-import net.sophka.polaroid.world.item.FilmFormat;
 import net.sophka.polaroid.world.item.PhotoItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,8 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandRenderer.class)
 public abstract class MixinItemInHandRenderer {
 
-    private PhotoInHandRenderer photoInHandRenderer;
-    private CameraInHandRenderer cameraInHandRenderer;
+    @Unique
+    private PhotoInHandRenderer polaroid600$photoInHandRenderer;
+    @Unique
+    private CameraInHandRenderer polaroid600$cameraInHandRenderer;
 
     @Shadow
     private ItemStack offHandItem;
@@ -33,21 +35,21 @@ public abstract class MixinItemInHandRenderer {
 
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0, shift = At.Shift.AFTER), cancellable = true)
     public void submitArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci){
-        if(photoInHandRenderer == null){
+        if(polaroid600$photoInHandRenderer == null){
             Object self = this;
-            photoInHandRenderer = new PhotoInHandRenderer((ItemInHandRenderer)self);
+            polaroid600$photoInHandRenderer = new PhotoInHandRenderer((ItemInHandRenderer)self);
         }
-        if(cameraInHandRenderer == null){
+        if(polaroid600$cameraInHandRenderer == null){
             Object self = this;
-            cameraInHandRenderer = new CameraInHandRenderer((ItemInHandRenderer)self);
+            polaroid600$cameraInHandRenderer = new CameraInHandRenderer((ItemInHandRenderer)self);
         }
         boolean isMainHand = hand == InteractionHand.MAIN_HAND;
         HumanoidArm arm = isMainHand ? player.getMainArm() : player.getMainArm().getOpposite();
         if (itemStack.getItem() instanceof PhotoItem) {
             if (isMainHand && this.offHandItem.isEmpty()) {
-                photoInHandRenderer.renderTwoHandedPhoto(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
+                polaroid600$photoInHandRenderer.renderTwoHandedPhoto(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
             } else {
-                photoInHandRenderer.renderOneHandedPhoto(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, arm, attack, itemStack);
+                polaroid600$photoInHandRenderer.renderOneHandedPhoto(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, arm, attack, itemStack);
             }
             poseStack.pushPose();
             ci.cancel();
@@ -55,12 +57,12 @@ public abstract class MixinItemInHandRenderer {
         else if (itemStack.getItem() instanceof CameraItem cameraItem && ClientState.selfieMode){
             if(cameraItem.twoHanded()){
                 if (isMainHand && this.offHandItem.isEmpty()) {
-                    cameraInHandRenderer.renderTwoHandedCamera(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
+                    polaroid600$cameraInHandRenderer.renderTwoHandedCamera(poseStack, submitNodeCollector, lightCoords, xRot, inverseArmHeight, attack, mainHandItem);
                 }
             }
             else{
 
-                cameraInHandRenderer.renderOneHandedCamera(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, arm, attack, itemStack);
+                polaroid600$cameraInHandRenderer.renderOneHandedCamera(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, arm, attack, itemStack);
             }
             poseStack.pushPose();
             ci.cancel();

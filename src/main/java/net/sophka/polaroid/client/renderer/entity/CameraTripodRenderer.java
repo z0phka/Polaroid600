@@ -12,7 +12,7 @@ import net.sophka.polaroid.client.model.entity.CameraTripodModel;
 import net.sophka.polaroid.client.renderer.entity.layers.TripodCameraLayer;
 import net.sophka.polaroid.client.renderer.entity.layers.TripodPhotoLayer;
 import net.sophka.polaroid.client.renderer.entity.state.CameraTripodState;
-import net.sophka.polaroid.world.entity.CameraTripodEntity;
+import net.sophka.polaroid.world.entity.tripod.CameraTripodEntity;
 
 public class CameraTripodRenderer extends LivingEntityRenderer<CameraTripodEntity, CameraTripodState, CameraTripodModel> {
     private final Identifier texture = Identifier.fromNamespaceAndPath(Polaroid600.MODID,"textures/entity/tripod/tripod.png");

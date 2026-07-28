@@ -10,7 +10,11 @@
     "MixinLevelRenderer",
     "MixinGameRenderer",
     "MixinListener",
-    "MixinSoundEngine"
+    "MixinSoundEngine",
+    "MixinBlockAndLightGetter",
+    "compatibility.sodium.MixinArrayLightDataCache",
+    "compatibility.iris.MixinEntityRenderer",
+    "compatibility.iris.MixinBlockEntityRenderState"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -41,7 +41,7 @@ public record FilmCartridgeSpriteSource(Identifier film, Identifier output) impl
         LazyLoadedImage lazyFilmTexture = new LazyLoadedImage(film, filmTexture.get(), 1);
         LazyLoadedImage lazyOverlayTexture = new LazyLoadedImage(overlay, overlayTexture.get(), 1);
 
-        out.add(this.output(), new FilmCatridgeSpriteSupplier(lazyFilmTexture, lazyOverlayTexture, output));
+        out.add(this.output(), new FilmCartridgeSpriteSupplier(lazyFilmTexture, lazyOverlayTexture, output));
     }
 
     @Override
@@ -49,7 +49,7 @@ public record FilmCartridgeSpriteSource(Identifier film, Identifier output) impl
         return CODEC;
     }
 
-    public record FilmCatridgeSpriteSupplier(LazyLoadedImage film, LazyLoadedImage overlay, Identifier output) implements SpriteSource.DiscardableLoader{
+    public record FilmCartridgeSpriteSupplier(LazyLoadedImage film, LazyLoadedImage overlay, Identifier output) implements SpriteSource.DiscardableLoader{
 
         @Override
         public @Nullable SpriteContents get(SpriteResourceLoader loader) {
@@ -72,6 +72,7 @@ public record FilmCartridgeSpriteSource(Identifier film, Identifier output) impl
                 return new SpriteContents(output, new FrameSize(width, height), resultImage);
             }
             catch (IOException e){
+                Polaroid600.LOGGER.error("Could not create a cartridge texture ", e);
                 e.printStackTrace();
             }finally {
                 this.film.release();

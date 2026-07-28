@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class TransformableImage implements Image{
 
     private final NativeImage nativeImage;
-    private Vec3[] pixels;
+    private final Vec3[] pixels;
     private final int width;
     private final int height;
 

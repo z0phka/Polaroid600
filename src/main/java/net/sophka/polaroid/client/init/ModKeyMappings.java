@@ -14,5 +14,6 @@ public class ModKeyMappings {
     public static final KeyMapping CAMERA_AUTOFOCUS_TOGGLE = new KeyMapping("camera.autofocus", GLFW.GLFW_KEY_KP_MULTIPLY, CATEGORY);
     public static final KeyMapping CAMERA_DOUBLE_EXPOSURE_TOGGLE = new KeyMapping("camera.double_exposure", GLFW.GLFW_KEY_KP_DIVIDE, CATEGORY);
     public static final KeyMapping CAMERA_SELFIE_MODE = new KeyMapping("camera.selfie_mode", GLFW.GLFW_KEY_R, CATEGORY);
+    public static final KeyMapping CAMERA_FLASH_TOGGLE = new KeyMapping("camera.flash", GLFW.GLFW_KEY_KP_9, CATEGORY);
 
 }

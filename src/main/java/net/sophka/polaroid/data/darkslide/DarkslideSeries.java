@@ -10,13 +10,13 @@ import java.util.List;
 
 public record DarkslideSeries(String seriesName, List<Darkslide> darkslides) {
 
-    public static Codec<DarkslideSeries> CODEC = RecordCodecBuilder.create(instance ->
+    public static final Codec<DarkslideSeries> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.STRING.fieldOf("name").forGetter(DarkslideSeries::seriesName),
                     Darkslide.CODEC.listOf().fieldOf("darkslides").forGetter(DarkslideSeries::darkslides)
             ).apply(instance, DarkslideSeries::new));
 
-    public static StreamCodec<ByteBuf, DarkslideSeries> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, DarkslideSeries> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             DarkslideSeries::seriesName,
             Darkslide.STREAM_CODEC.apply(ByteBufCodecs.list()),

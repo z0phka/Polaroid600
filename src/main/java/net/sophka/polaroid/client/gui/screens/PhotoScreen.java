@@ -2,15 +2,7 @@ package net.sophka.polaroid.client.gui.screens;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.BookViewScreen;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FontDescription;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.renderer.PhotoRenderer;
 
 public class PhotoScreen extends Screen {

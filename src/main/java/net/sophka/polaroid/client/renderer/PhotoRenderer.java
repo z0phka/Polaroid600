@@ -92,11 +92,11 @@ public class PhotoRenderer {
 
             graphics.blit(RenderPipelines.GUI_TEXTURED, data.texture(), Math.round(x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), 0, 0, (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), (int) (frameWidth - leftMargin - rightMargin), (int) (frameHeight - topMargin - bottomMargin), imageColor);
 
-            if (sunDamage > 0) {
+            if (sunDamage > 0 && ClientConfig.SOLARIZATION_OVERLAY.get()) {
                 int damageColor = ARGB.color((int) Math.round(255 * sunDamage), 0xffffff);
                 graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), Math.round(y + frameHeight / 2f - bottomMargin), damageColor);
             }
-            if (progress < 1) {
+            if (progress < 1 && ClientConfig.OPACIFIER_OVERLAY.get()) {
                 int opacifierColor = ARGB.color((int) Math.round(255 * Utils.clampUnit(1 - progress * 1.25)), 84, 169, 229);
                 graphics.fill((int) (x + leftMargin - frameWidth / 2f), Math.round(y + topMargin - frameHeight / 2f), Math.round(x + frameWidth / 2f - rightMargin), Math.round(y + frameHeight / 2f - bottomMargin), opacifierColor);
             }
@@ -158,7 +158,7 @@ public class PhotoRenderer {
             });
 
             double sunDamage = PhotoItem.sunDamage(minecraft.level, itemStack);
-            if (sunDamage > 0) {
+            if (sunDamage > 0 && ClientConfig.SOLARIZATION_OVERLAY.get()) {
                 //TODO: Replace with actual image editing for sun damage
                 int damageColor = ARGB.color((int) Math.round(255 * sunDamage), 0xffffff);
                 submitNodeCollector.submitCustomGeometry(poseStack, _1x1_TYPE, (pose, buffer) -> {
@@ -169,7 +169,7 @@ public class PhotoRenderer {
                 });
             }
 
-            if (progress < 1) {
+            if (progress < 1 && ClientConfig.OPACIFIER_OVERLAY.get()) {
                 int opacifierColor = ARGB.color((int) Math.round(255 * Utils.clampUnit(1 - progress * 1.25)), 84, 169, 229);
                 submitNodeCollector.submitCustomGeometry(poseStack, _1x1_TYPE, (pose, buffer) -> {
                     buffer.addVertex(pose, leftMargin, frameHeight - bottomMargin, -0.0125F).setColor(opacifierColor).setUv(0.0F, 1.0F).setUv1(OverlayTexture.NO_WHITE_U, OverlayTexture.WHITE_OVERLAY_V).setNormal(pose, 0, 0, -1).setLight(lightCoords);

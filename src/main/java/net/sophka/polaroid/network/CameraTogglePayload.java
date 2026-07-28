@@ -11,7 +11,6 @@ import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.world.item.FilmFormat;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntFunction;
@@ -19,9 +18,10 @@ import java.util.function.IntFunction;
 public record CameraTogglePayload(ToggleType toggleType) implements CustomPacketPayload {
     public enum ToggleType implements StringRepresentable {
         DOUBLE_EXPOSURE("double_exposure"),
-        AF("af");
+        AF("af"),
+        FLASH("flash");
 
-        public static final Codec<ToggleType> COODEC = StringRepresentable.fromEnum(ToggleType::values);
+        public static final Codec<ToggleType> CODEC = StringRepresentable.fromEnum(ToggleType::values);
         private static final IntFunction<ToggleType> BY_ID = ByIdMap.continuous(Enum::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
         public static final StreamCodec<ByteBuf, ToggleType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, Enum::ordinal);
 

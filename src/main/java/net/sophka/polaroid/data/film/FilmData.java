@@ -9,7 +9,7 @@ import java.util.List;
 
 public record FilmData(FilmFormat format, List<FilmTransformation> transformations) {
 
-    public static Codec<FilmData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<FilmData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             StringRepresentable.fromEnum(FilmFormat::values).fieldOf("format").forGetter(FilmData::format),
             FilmTransformation.dispatchCodec().listOf().fieldOf("transformations").forGetter(FilmData::transformations))
             .apply(instance, FilmData::new));

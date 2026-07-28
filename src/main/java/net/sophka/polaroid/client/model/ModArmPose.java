@@ -9,7 +9,7 @@ import net.neoforged.neoforge.client.IArmPoseTransformer;
 public class ModArmPose {
 
     private static final IArmPoseTransformer SELFIE_BOTH_ARM_POSE_TRANSFOMER =
-            (IArmPoseTransformer)(model, state, arm) -> {
+            (model, state, arm) -> {
                 ModelPart mainArm = model.getArm(arm);
                 ModelPart offhandArm = model.getArm(arm.getOpposite());
 
@@ -22,7 +22,7 @@ public class ModArmPose {
     };
 
     private static final IArmPoseTransformer SELFIE_LEFT_ARM_POSE_TRANSFOMER =
-            (IArmPoseTransformer)(model, state, arm) -> {
+            (model, state, arm) -> {
                 ModelPart mainArm = model.getArm(arm);
                 ModelPart offhandArm = model.getArm(arm.getOpposite());
 
@@ -35,7 +35,7 @@ public class ModArmPose {
             };
 
     private static final IArmPoseTransformer SELFIE_RIGHT_ARM_POSE_TRANSFOMER =
-            (IArmPoseTransformer)(model, state, arm) -> {
+            (model, state, arm) -> {
                 ModelPart mainArm = model.getArm(arm);
                 ModelPart offhandArm = model.getArm(arm.getOpposite());
 

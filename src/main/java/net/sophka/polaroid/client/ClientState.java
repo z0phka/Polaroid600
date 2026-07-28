@@ -22,7 +22,7 @@ public class ClientState {
 
     private static RenderTarget selfieMirrorTarget;
     private static SelfieMirrorTexture selfieMirrorTexture;
-    private static LevelToTargetRenderer levelToTargetRenderer = new LevelToTargetRenderer(Minecraft.getInstance());
+    private static final LevelToTargetRenderer levelToTargetRenderer = new LevelToTargetRenderer(Minecraft.getInstance());
     public static final Identifier selfieMirrorTextureIdentifier = Identifier.fromNamespaceAndPath(Polaroid600.MODID, "selfie_mirror");
 
     private static boolean selfieCameraPass = false;

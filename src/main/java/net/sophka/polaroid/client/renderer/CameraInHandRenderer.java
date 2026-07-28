@@ -14,7 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
-import net.sophka.polaroid.world.item.CameraItem;
 import net.sophka.polaroid.world.item.ModItemDisplayContexts;
 
 public class CameraInHandRenderer {
@@ -86,8 +85,8 @@ public class CameraInHandRenderer {
 
     public void renderTwoHandedCamera(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, float xRot, float inverseArmHeight, float attackValue, ItemStack camera) {
         float sqrtAttackValue = Mth.sqrt(attackValue);
-        float ySwingPosition = -0.2F * Mth.sin((double)(attackValue * (float)Math.PI));
-        float zSwingPosition = -0.4F * Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+        float ySwingPosition = -0.2F * Mth.sin(attackValue * (float)Math.PI);
+        float zSwingPosition = -0.4F * Mth.sin(sqrtAttackValue * (float)Math.PI);
         poseStack.translate(0.0F, -ySwingPosition / 2.0F, zSwingPosition);
         float mapTilt = calculateTilt(xRot);
         poseStack.translate(0.0F, -0.2F + inverseArmHeight * -1.2F + mapTilt * -0.5F, -0.95F);
@@ -100,7 +99,7 @@ public class CameraInHandRenderer {
             poseStack.popPose();
         }
 
-        float xzSwingRotation = Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+        float xzSwingRotation = Mth.sin(sqrtAttackValue * (float)Math.PI);
         poseStack.mulPose(Axis.XP.rotationDegrees(xzSwingRotation * 20.0F));
         poseStack.translate(0,0.3,-0.025);
         itemInHandRenderer.renderItem(this.minecraft.player, camera, ModItemDisplayContexts.selfieModeFirstPersonBoth(), poseStack, submitNodeCollector, lightCoords);
@@ -111,33 +110,17 @@ public class CameraInHandRenderer {
         LocalPlayer player = this.minecraft.player;
         poseStack.pushPose();
         float sqrtAttackValue = Mth.sqrt(attack);
-        float ySwingPosition = -0.2F * Mth.sin((double)(attack * (float)Math.PI));
-        float zSwingPosition = -0.4F * Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+        float ySwingPosition = -0.2F * Mth.sin(attack * (float)Math.PI);
+        float zSwingPosition = -0.4F * Mth.sin(sqrtAttackValue * (float)Math.PI);
         poseStack.translate(0.0F, -ySwingPosition / 2.0F, zSwingPosition);
         poseStack.translate(0, -inverseArmHeight, 0);
         poseStack.translate(invert * 0.2,0.35,-0.225);
         if (!this.minecraft.player.isInvisible()) {
             poseStack.pushPose();
             poseStack.translate(-0.18 * invert,0,0.25);
-            //poseStack.mulPose(Axis.XP.rotationDegrees(-invert * 5));
-            //poseStack.translate(0.3,-0,0);
-            //poseStack.mulPose(Axis.ZP.rotationDegrees(90));
-            //poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-            //itemInHandRenderer.renderPlayerArm(poseStack, submitNodeCollector, lightCoords, inverseArmHeight, attack, arm);
-            /*AvatarRenderer<AbstractClientPlayer> avatarRenderer = this.entityRenderDispatcher.getPlayerRenderer(player);
-            Identifier skinTexture = player.getSkin().body().texturePath();
-            if (arm == HumanoidArm.RIGHT) {
-                avatarRenderer.renderRightHand(poseStack, submitNodeCollector, lightCoords, skinTexture, player.isModelPartShown(PlayerModelPart.RIGHT_SLEEVE), this.minecraft.player);
-            } else {
-                avatarRenderer.renderLeftHand(poseStack, submitNodeCollector, lightCoords, skinTexture, player.isModelPartShown(PlayerModelPart.LEFT_SLEEVE), this.minecraft.player);
-            }*/
             itemInHandRenderer.renderPlayerArm(poseStack, submitNodeCollector, lightCoords, 0, 0, arm);
             poseStack.popPose();
         }
-        //poseStack.mulPose(Axis.YP.rotationDegrees(-45.0F));
-        //poseStack.translate(invert * xSwingPosition, ySwingPosition - 0.3F * xSwing, zSwingPosition);
-        //poseStack.mulPose(Axis.XP.rotationDegrees(xSwing * -45.0F));
-        //poseStack.mulPose(Axis.YP.rotationDegrees(invert * xSwing * -30.0F));
 
         poseStack.translate(invert * 0.4F, -0.14F, -1F);
         itemInHandRenderer.renderItem(this.minecraft.player, itemStack, ModItemDisplayContexts.selfieModeFirstPerson(arm), poseStack, submitNodeCollector, lightCoords);

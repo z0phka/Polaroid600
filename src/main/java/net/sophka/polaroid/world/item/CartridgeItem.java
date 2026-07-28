@@ -1,6 +1,5 @@
 package net.sophka.polaroid.world.item;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -8,7 +7,6 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.BundleContents;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.world.item.component.FilmContent;
 

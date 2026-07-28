@@ -1,7 +1,5 @@
 package net.sophka.polaroid.mixin;
 
-import com.mojang.blaze3d.audio.Listener;
-import com.mojang.blaze3d.audio.ListenerTransform;
 import net.minecraft.client.Camera;
 import net.minecraft.client.sounds.SoundEngine;
 import net.sophka.polaroid.client.ClientState;

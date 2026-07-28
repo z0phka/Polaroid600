@@ -16,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.world.item.FilmFormat;
 
-import java.util.Optional;
-
 public class PhotoInHandRenderer {
 
     private final ItemInHandRenderer itemInHandRenderer;
@@ -56,10 +54,10 @@ public class PhotoInHandRenderer {
             poseStack.translate(-scale * frame.frameWidth()/2f,0,0);
             poseStack.translate(invert * 0.625F, -0.14F + inverseArmHeight * -1.2F, -0.95F);
             float sqrtAttackValue = Mth.sqrt(attackValue);
-            float xSwing = Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+            float xSwing = Mth.sin(sqrtAttackValue * (float)Math.PI);
             float xSwingPosition = -0.5F * xSwing;
-            float ySwingPosition = 0.4F * Mth.sin((double)(sqrtAttackValue * ((float)Math.PI * 2F)));
-            float zSwingPosition = -0.3F * Mth.sin((double)(attackValue * (float)Math.PI));
+            float ySwingPosition = 0.4F * Mth.sin(sqrtAttackValue * ((float)Math.PI * 2F));
+            float zSwingPosition = -0.3F * Mth.sin(attackValue * (float)Math.PI);
 
             poseStack.translate(invert * xSwingPosition, ySwingPosition - 0.3F * xSwing, zSwingPosition);
             poseStack.mulPose(Axis.XP.rotationDegrees(xSwing * -45.0F));
@@ -100,8 +98,8 @@ public class PhotoInHandRenderer {
 
     public void renderTwoHandedPhoto(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, float xRot, float inverseArmHeight, float attackValue, ItemStack photo) {
         float sqrtAttackValue = Mth.sqrt(attackValue);
-        float ySwingPosition = -0.2F * Mth.sin((double)(attackValue * (float)Math.PI));
-        float zSwingPosition = -0.4F * Mth.sin((double)(sqrtAttackValue * (float)Math.PI));
+        float ySwingPosition = -0.2F * Mth.sin(attackValue * (float)Math.PI);
+        float zSwingPosition = -0.4F * Mth.sin(sqrtAttackValue * (float)Math.PI);
         poseStack.translate(0.0F, -ySwingPosition / 2.0F, zSwingPosition);
         float mapTilt = calculateTilt(xRot);
         poseStack.translate(0.0F, 0.04F + inverseArmHeight * -1.2F + mapTilt * -0.5F, -0.75F);
@@ -119,7 +117,7 @@ public class PhotoInHandRenderer {
             FilmFormat format = photo.getOrDefault(ModDataComponents.FILM_FORMAT, data.format());
             PhotoRenderer.Frame frame = PhotoRenderer.frame(format);
 
-            float xzSwingRotation = Mth.sin((double) (sqrtAttackValue * (float) Math.PI));
+            float xzSwingRotation = Mth.sin(sqrtAttackValue * (float) Math.PI);
             poseStack.mulPose(Axis.XP.rotationDegrees(xzSwingRotation * 20.0F));
             PhotoRenderer.Frame _600 = PhotoRenderer._600;
             poseStack.translate(-0.1875F * (frame.frameWidth() / (float)_600.frameWidth()), 2 * 0.1875F * (frame.frameHeight() - _600.frameHeight()) / (float)_600.frameHeight() , -0.15f);

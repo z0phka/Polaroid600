@@ -2,9 +2,7 @@ package net.sophka.polaroid.client.gui.layers;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.neoforged.neoforge.client.gui.GuiLayer;
-import net.sophka.polaroid.client.ClientState;
 
 public class DebugLayer implements GuiLayer {
     @Override

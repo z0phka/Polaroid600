@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.sophka.polaroid.init.ModDataComponents;
+import net.sophka.polaroid.config.ServerConfig;
 import net.sophka.polaroid.init.ModSounds;
 import net.sophka.polaroid.network.PhotoCaptureRequestPayload;
 import net.sophka.polaroid.world.item.CameraItem;
@@ -34,7 +34,7 @@ public class ServerPhotoTaker {
         }
 
         int token = PhotoTokenManager.getInstance().acquireTokenFor(player, () -> cameraStack, photoStack -> {
-                player.getCooldowns().addCooldown(cameraStack, 60);
+                player.getCooldowns().addCooldown(cameraStack, ServerConfig.CAMERA_COOLDOWN.get());
                 givePhoto(photoStack, player);
             }, !player.isCreative());
         PacketDistributor.sendToPlayer(player, new PhotoCaptureRequestPayload(cameraStack, true, 0,0,0,0,0,0, token));
@@ -42,8 +42,14 @@ public class ServerPhotoTaker {
 
     public static void givePhoto(ItemStack photoStack, Player player) {
         Level level = player.level();
-        level.playSound(null, player.blockPosition(), ModSounds.CAMERA_SHUTTER.get(), SoundSource.PLAYERS, 0.3F,
-                1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+        if(level.isClientSide()){
+            player.playSound(ModSounds.CAMERA_SHUTTER.get(), 0.3F,
+                    1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+        }
+        else{
+            level.playSound(null, player.blockPosition(), ModSounds.CAMERA_SHUTTER.get(), SoundSource.PLAYERS, 0.3F,
+                    1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+        }
         if (!player.addItem(photoStack)) {
             player.drop(photoStack, false);
         }

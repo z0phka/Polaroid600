@@ -15,7 +15,6 @@ import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlers
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.sophka.polaroid.Polaroid600;
-import net.sophka.polaroid.Polaroid600Client;
 import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.gui.layers.DebugLayer;
 import net.sophka.polaroid.client.gui.screens.CameraFilmTooltipComponent;
@@ -101,6 +100,7 @@ public class ClientRegisterEventHandler {
         event.register(ModKeyMappings.CAMERA_AUTOFOCUS_TOGGLE);
         event.register(ModKeyMappings.CAMERA_DOUBLE_EXPOSURE_TOGGLE);
         event.register(ModKeyMappings.CAMERA_SELFIE_MODE);
+        event.register(ModKeyMappings.CAMERA_FLASH_TOGGLE);
     }
 
 
