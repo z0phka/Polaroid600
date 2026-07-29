@@ -8,12 +8,12 @@
     "T": "minecraft:bone_meal"
   },
   "pattern": [
-    "COT",
-    " P ",
-    "COT"
+    "OCT",
+    "CPC",
+    "OCT"
   ],
   "result": {
     "id": "polaroid600:light_sensitive_layer",
-    "count": 4
+    "count": 8
   }
 }

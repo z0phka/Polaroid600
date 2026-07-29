@@ -24,6 +24,18 @@ public class Utils {
         return baos.toByteArray();
     }
 
+    public static byte[] compressBytes(byte[] data) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(baos);
+             DataOutputStream dos = new DataOutputStream(gzip)) {
+            for (int value : data) {
+                dos.writeInt(value);
+            }
+        }
+        Polaroid600.LOGGER.debug("{}/{} B", data.length, baos.toByteArray().length);
+        return baos.toByteArray();
+    }
+
     public static int[] decompressInts(byte[] compressed, int length) throws IOException {
         int[] result = new int[length];
 

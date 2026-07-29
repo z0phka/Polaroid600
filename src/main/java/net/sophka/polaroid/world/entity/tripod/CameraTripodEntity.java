@@ -193,15 +193,12 @@ public class CameraTripodEntity extends LivingEntity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        Polaroid600.LOGGER.debug("{} {}", location, level().isClientSide());
         ItemStack itemStack = player.getItemInHand(hand);
         ItemStack cameraStack = getCamera();
         ItemStack photoStack = getPhoto();
 
         boolean clickedHead = location.y > 17/16f;
         boolean clickedCamera = location.y > this.getBbHeight();
-
-        Polaroid600.LOGGER.debug("vec {} {} {}", location, clickedHead, clickedCamera);
 
         boolean hasCamera = !this.getCamera().isEmpty();
         boolean holdsCamera = !itemStack.isEmpty() && itemStack.getItem() instanceof CameraItem;
@@ -237,7 +234,6 @@ public class CameraTripodEntity extends LivingEntity {
                                     shoot();
                                 }
                             }
-                            Polaroid600.LOGGER.debug("DOT {}", dot);
                         }
                     } else {
                         this.setYHeadRot(player.getYRot());

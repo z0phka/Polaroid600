@@ -1,6 +1,5 @@
 package net.sophka.polaroid.network;
 
-import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
@@ -23,14 +22,16 @@ import net.sophka.polaroid.world.item.FilmItem;
 import net.sophka.polaroid.world.item.component.FilmContent;
 import net.sophka.polaroid.world.item.component.DoubleExposure;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.Optional;
 
 public class ServerPayloadHandler {
 
-    private static boolean verifyIncomingPhotoPayload(PhotoDataPayload data, Player player){
-        if(data.token() != -1){
+    private static boolean verifyIncomingPhotoPayload(PhotoDataPayload data, Player player) {
+        if (data.token() != -1) {
             return PhotoTokenManager.getInstance().verify(data.token(), player);
         }
         return false;
@@ -39,7 +40,7 @@ public class ServerPayloadHandler {
     public static void handlePhotoData(final PhotoDataPayload data, final IPayloadContext context) {
         Polaroid600.LOGGER.debug("{} bytes received", data.data().length);
         Player player = context.player();
-        if(!verifyIncomingPhotoPayload(data, player)){
+        if (!verifyIncomingPhotoPayload(data, player)) {
             return;
         }
 
@@ -59,30 +60,31 @@ public class ServerPayloadHandler {
         MinecraftServer server = context.player().level().getServer();
         Path path = server.getWorldPath(Utils.PHOTOS);
 
-        try (NativeImage scaled = data.toImage()) {
+        try {
             File file = doubleExposure.isPrimed() ?
                     new File(path.toFile(), doubleExposure.getPartialImage()) :
                     getFile(data.format(), path.toFile());
 
-            if(doubleExposure.isPrimed()){
-                doubleExposure(file, scaled);
+            int[] pixels = Utils.decompressInts(data.data(), data.format().width * data.format().height);
+            if (doubleExposure.isPrimed()) {
+                doubleExposure(file, pixels);
             }
 
             file.getParentFile().mkdirs();
-            scaled.writeToFile(file);
+            saveImage(pixels, data.format().width, data.format().height, file);
+
             String id = data.format().name + '/' + file.getName();
             Player player = context.player();
             context.enqueueWork(() -> {
                 if (doubleExposure.getState() == DoubleExposure.State.ON) {
                     mutableDoubleExposure.storePartialImage(id);
                     cameraStack.set(ModDataComponents.DOUBLE_EXPOSURE, mutableDoubleExposure.toImmutable());
-                }
-                else{
+                } else {
                     ItemStack photoStack = photoStack(id, cameraStack, player);
-                    if(photoStack.isEmpty()){
+                    if (photoStack.isEmpty()) {
                         return;
                     }
-                    if(entry.consumeFilm()){
+                    if (entry.consumeFilm()) {
                         mutableCameraFilm.getFilm().shrink(1);
                     }
                     CameraItem.updateFilmContent(cameraStack, mutableCameraFilm.toImmutable());
@@ -98,29 +100,44 @@ public class ServerPayloadHandler {
         }
     }
 
-    private static void doubleExposure(File file, NativeImage scaled) throws IOException {
-        try (FileInputStream fis = new FileInputStream(file)) {
-            NativeImage nativeImage = NativeImage.read(fis);
-            for(int x = 0; x < scaled.getWidth(); x++){
-                for (int y = 0; y < scaled.getHeight(); y++){
-                    int colorA = nativeImage.getPixel(x,y);
-                    int colorB = scaled.getPixel(x,y);
+    private static void saveImage(int[] pixels, int width, int height, File file) throws IOException {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        image.setRGB(0, 0, width, height, pixels, 0, width);
+        ImageIO.write(image, "png", file);
+    }
 
-                    int red = Math.clamp(ARGB.red(colorA) + ARGB.red(colorB),0,255);
-                    int green = Math.clamp(ARGB.green(colorA) + ARGB.green(colorB),0,255);
-                    int blue = Math.clamp(ARGB.blue(colorA) + ARGB.blue(colorB),0,255);
+    private static int[] readImage(File file) throws IOException {
+        BufferedImage image = ImageIO.read(file);
+        if (image == null) {
+            throw new IOException("Missing or corrupted file " + file);
+        }
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] pixels = new int[width * height];
+        image.getRGB(0, 0, width, height, pixels, 0, width);
+        return pixels;
+    }
 
-                    scaled.setPixel(x,y,ARGB.color(
-                            255,
-                            red,
-                            green,
-                            blue));
-                }
-            }
+    private static void doubleExposure(File firstExposureFile, int[] secondExposure) throws IOException {
+        int[] firstExposure = readImage(firstExposureFile);
+        int length = Math.min(secondExposure.length, firstExposure.length);
+        for(int i = 0; i < length; i++){
+            int colorA = firstExposure[i];
+            int colorB = secondExposure[i];
+
+            int red = Math.clamp(ARGB.red(colorA) + ARGB.red(colorB),0,255);
+            int green = Math.clamp(ARGB.green(colorA) + ARGB.green(colorB),0,255);
+            int blue = Math.clamp(ARGB.blue(colorA) + ARGB.blue(colorB),0,255);
+
+            secondExposure[i] = ARGB.color(
+                    255,
+                    red,
+                    green,
+                    blue);
         }
     }
 
-    private static ItemStack photoStack(String id, ItemStack cameraStack, Player player){
+    private static ItemStack photoStack(String id, ItemStack cameraStack, Player player) {
         if (cameraStack.isEmpty() || !(cameraStack.getItem() instanceof CameraItem cameraItem)) {
             return ItemStack.EMPTY;
         }
@@ -161,7 +178,7 @@ public class ServerPayloadHandler {
         MinecraftServer server = context.player().level().getServer();
         Path path = server.getWorldPath(Utils.PHOTOS);
         int formatSeparator = data.id().indexOf('/');
-        if (formatSeparator == -1){
+        if (formatSeparator == -1) {
             return;
         }
         String formatId = data.id().substring(0, formatSeparator);
@@ -173,14 +190,13 @@ public class ServerPayloadHandler {
             if (!file.exists()) {
                 context.reply(new PhotoDataPayload(new byte[0], FilmFormat.MISSING, data.id(), -1));
             }
-            try (FileInputStream fis = new FileInputStream(file)) {
-                NativeImage nativeImage = NativeImage.read(fis);
-                context.reply(new PhotoDataPayload(Utils.compressInts(nativeImage.getPixels()), format, data.id(), -1));
+
+            try {
+                context.reply(new PhotoDataPayload(Utils.compressInts(readImage(file)), format, data.id(), -1));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
@@ -213,7 +229,7 @@ public class ServerPayloadHandler {
 
 
     public static void cameraToggle(final CameraTogglePayload data, final IPayloadContext context) {
-        switch (data.toggleType()){
+        switch (data.toggleType()) {
             case DOUBLE_EXPOSURE -> doubleExposureToggle(data, context);
             case AF -> autofocusToggle(data, context);
             case FLASH -> flashToggle(data, context);
@@ -253,9 +269,9 @@ public class ServerPayloadHandler {
             if (!(stack.getItem() instanceof CameraItem cameraItem) || !cameraItem.cameraProperties.hasAF()) {
                 return;
             }
-            boolean state = stack.getOrDefault(ModDataComponents.AF,false);
+            boolean state = stack.getOrDefault(ModDataComponents.AF, false);
             player.sendOverlayMessage(Component.translatable(state ? "autofocus.off.message" : "autofocus.on.message"));
-            stack.set(ModDataComponents.AF,!state);
+            stack.set(ModDataComponents.AF, !state);
             level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.3F,
                     1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
         });
@@ -269,9 +285,9 @@ public class ServerPayloadHandler {
             if (!(stack.getItem() instanceof CameraItem cameraItem) || cameraItem.cameraProperties.getFlashMode() != CameraItem.CameraProperties.FlashMode.OPTIONAL) {
                 return;
             }
-            boolean state = stack.getOrDefault(ModDataComponents.FLASH,false);
+            boolean state = stack.getOrDefault(ModDataComponents.FLASH, false);
             player.sendOverlayMessage(Component.translatable(state ? "flash.off.message" : "flash.on.message"));
-            stack.set(ModDataComponents.FLASH,!state);
+            stack.set(ModDataComponents.FLASH, !state);
             level.playSound(null, player.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.3F,
                     1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
         });

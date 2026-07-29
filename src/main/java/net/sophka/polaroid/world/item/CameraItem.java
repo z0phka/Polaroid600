@@ -265,6 +265,9 @@ public class CameraItem extends Item {
             return false;
         } else {
             CameraCartridge.Mutable contents = new CameraCartridge.Mutable(initialContents);
+            if(!contents.getCartridgeStack().isEmpty()){
+                return false;
+            }
             if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
                 contents.tryInsert(other);
                 self.set(ModDataComponents.CAMERA_CARTRIDGE.get(), contents.toImmutable());

@@ -19,10 +19,7 @@ import net.sophka.polaroid.client.ClientState;
 import net.sophka.polaroid.client.gui.layers.DebugLayer;
 import net.sophka.polaroid.client.gui.screens.CameraFilmTooltipComponent;
 import net.sophka.polaroid.client.init.ModKeyMappings;
-import net.sophka.polaroid.client.model.FilmContentTypeProperty;
-import net.sophka.polaroid.client.model.FilmTypeProperty;
-import net.sophka.polaroid.client.model.ModArmPose;
-import net.sophka.polaroid.client.model.ModModelProvider;
+import net.sophka.polaroid.client.model.*;
 import net.sophka.polaroid.client.model.entity.CameraTripodModel;
 import net.sophka.polaroid.client.renderer.entity.CameraTripodRenderer;
 import net.sophka.polaroid.client.renderer.level.block.PhotoBlockEntityRenderer;
@@ -87,8 +84,12 @@ public class ClientRegisterEventHandler {
                 FilmTypeProperty.TYPE
         );
         event.register(
+                Identifier.fromNamespaceAndPath(Polaroid600.MODID, "film_format"),
+                FilmFormatProperty.TYPE
+        );
+        event.register(
                 Identifier.fromNamespaceAndPath(Polaroid600.MODID, "film_content_type"),
-                FilmContentTypeProperty.TYPE
+                FilmContentProperty.TYPE
         );
     }
 

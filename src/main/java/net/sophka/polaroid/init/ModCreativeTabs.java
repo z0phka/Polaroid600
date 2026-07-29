@@ -45,10 +45,6 @@ public class ModCreativeTabs {
                 output.accept(ModItems.BLUE_LIGHT_SENSITIVE_LAYER.get());
                 output.accept(ModItems.LIGHT_SENSITIVE_LAYER.get());
 
-                output.accept(ModItems.CYAN_DEVELOPER.get());
-                output.accept(ModItems.MAGENTA_DEVELOPER.get());
-                output.accept(ModItems.YELLOW_DEVELOPER.get());
-
                 if(ClientConfig.DARKSLIDES_IN_CREATIVE_TAB.get()) {
                     DarkslideManager.CLIENT_INSTANCE.darkslideSeries().entrySet().stream().flatMap(entry ->
                                     entry.getValue().darkslides().stream().map(darkslide -> entry.getKey().withSuffix("/" + darkslide.identifier())))

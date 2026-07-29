@@ -73,7 +73,6 @@ public record FilmCartridgeSpriteSource(Identifier film, Identifier output) impl
             }
             catch (IOException e){
                 Polaroid600.LOGGER.error("Could not create a cartridge texture ", e);
-                e.printStackTrace();
             }finally {
                 this.film.release();
                 this.overlay.release();

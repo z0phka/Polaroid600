@@ -13,9 +13,9 @@ import net.sophka.polaroid.world.item.FilmType;
 import net.sophka.polaroid.world.item.component.FilmContent;
 import org.jspecify.annotations.Nullable;
 
-public record FilmContentTypeProperty() implements SelectItemModelProperty<FilmType> {
-    public static final Type<FilmContentTypeProperty, FilmType> TYPE = Type.create(
-            MapCodec.unit(new FilmContentTypeProperty()),
+public record FilmContentProperty() implements SelectItemModelProperty<FilmType> {
+    public static final Type<FilmContentProperty, FilmType> TYPE = Type.create(
+            MapCodec.unit(new FilmContentProperty()),
             FilmType.CODEC
     );
 
@@ -35,7 +35,7 @@ public record FilmContentTypeProperty() implements SelectItemModelProperty<FilmT
     }
 
     @Override
-    public Type<FilmContentTypeProperty, FilmType> type() {
+    public Type<FilmContentProperty, FilmType> type() {
         return TYPE;
     }
 }

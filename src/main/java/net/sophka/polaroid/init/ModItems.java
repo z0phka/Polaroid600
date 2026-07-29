@@ -17,8 +17,8 @@ public class ModItems {
     public static final DeferredItem<Item> CAMERA_NOW = ITEMS.registerItem("camera_now", p -> new CameraItem(p,new CameraItem.CameraProperties().withDoubleExposure().withAF().withTimer().withFlash()),p -> p.stacksTo(1).component(ModDataComponents.DOUBLE_EXPOSURE, DoubleExposure.OFF).component(ModDataComponents.AF,false));
     public static final DeferredItem<Item> CAMERA_GO = ITEMS.registerItem("camera_go", p -> new CameraItem(p,new CameraItem.CameraProperties().withDoubleExposure().withAF().withFilmFormat(FilmFormat._GO).withTimer().withFlash().withSelfieMirror()), p -> p.stacksTo(1).component(ModDataComponents.DOUBLE_EXPOSURE, DoubleExposure.OFF).component(ModDataComponents.AF,false));
     public static final DeferredItem<Item> CAMERA_SPECTRA = ITEMS.registerItem("camera_spectra", p -> new CameraItem(p,new CameraItem.CameraProperties().withAF().withFilmFormat(FilmFormat._1200).withTimer().withFlash()), p -> p.stacksTo(1).component(ModDataComponents.AF,false));
-    public static final DeferredItem<Item> CAMERA_SX_70 = ITEMS.registerItem("camera_sx_70", p -> new CameraItem(p,new CameraItem.CameraProperties().withFilmFormat(FilmFormat._SX_70).withAF().withFlash()),p -> p.stacksTo(1).component(ModDataComponents.AF,false));
-    public static final DeferredItem<Item> CAMERA_I_2 = ITEMS.registerItem("camera_i_2", p -> new CameraItem(p,new CameraItem.CameraProperties().withFilmFormat(FilmFormat._SX_70).withAF().withFlash()),p -> p.stacksTo(1).component(ModDataComponents.AF,false));
+    //public static final DeferredItem<Item> CAMERA_SX_70 = ITEMS.registerItem("camera_sx_70", p -> new CameraItem(p,new CameraItem.CameraProperties().withFilmFormat(FilmFormat._SX_70).withAF().withFlash()),p -> p.stacksTo(1).component(ModDataComponents.AF,false));
+    //public static final DeferredItem<Item> CAMERA_I_2 = ITEMS.registerItem("camera_i_2", p -> new CameraItem(p,new CameraItem.CameraProperties().withFilmFormat(FilmFormat._SX_70).withAF().withFlash()),p -> p.stacksTo(1).component(ModDataComponents.AF,false));
 
     public static final DeferredItem<PhotoItem> PHOTO = ITEMS.registerItem("photo", PhotoItem::new, p -> p.stacksTo(1).component(ModDataComponents.CREATED_TIME,0L));
 
@@ -35,9 +35,9 @@ public class ModItems {
     public static final DeferredItem<Item> GREEN_LIGHT_SENSITIVE_LAYER = ITEMS.registerSimpleItem("green_light_sensitive_layer", p -> p.stacksTo(64));
     public static final DeferredItem<Item> RED_LIGHT_SENSITIVE_LAYER = ITEMS.registerSimpleItem("red_light_sensitive_layer", p -> p.stacksTo(64));
     public static final DeferredItem<Item> LIGHT_SENSITIVE_LAYER = ITEMS.registerSimpleItem("light_sensitive_layer", p -> p.stacksTo(64));
-    public static final DeferredItem<Item> CYAN_DEVELOPER = ITEMS.registerSimpleItem("cyan_developer", p -> p.stacksTo(64));
-    public static final DeferredItem<Item> MAGENTA_DEVELOPER = ITEMS.registerSimpleItem("magenta_developer", p -> p.stacksTo(64));
-    public static final DeferredItem<Item> YELLOW_DEVELOPER = ITEMS.registerSimpleItem("yellow_developer", p -> p.stacksTo(64));
+    //public static final DeferredItem<Item> CYAN_DEVELOPER = ITEMS.registerSimpleItem("cyan_developer", p -> p.stacksTo(64));
+    //public static final DeferredItem<Item> MAGENTA_DEVELOPER = ITEMS.registerSimpleItem("magenta_developer", p -> p.stacksTo(64));
+    //public static final DeferredItem<Item> YELLOW_DEVELOPER = ITEMS.registerSimpleItem("yellow_developer", p -> p.stacksTo(64));
     public static final DeferredItem<Item> BW_REAGENT = ITEMS.registerSimpleItem("bw_reagent", p -> p.stacksTo(64));
     public static final DeferredItem<Item> COLOR_REAGENT = ITEMS.registerSimpleItem("color_reagent", p -> p.stacksTo(64));
     public static final DeferredItem<Item> BW_NEGATIVE = ITEMS.registerSimpleItem("bw_negative", p -> p.stacksTo(64));

@@ -6,9 +6,9 @@
     "R": "polaroid600:red_light_sensitive_layer",
     "G": "polaroid600:green_light_sensitive_layer",
     "B": "polaroid600:blue_light_sensitive_layer",
-    "C": "polaroid600:cyan_developer",
-    "M": "polaroid600:magenta_developer",
-    "Y": "polaroid600:yellow_developer"
+    "C": "minecraft:cyan_dye",
+    "M": "minecraft:magenta_dye",
+    "Y": "minecraft:yellow_dye"
   },
   "pattern": [
     "CMY",

@@ -45,10 +45,4 @@ public class RegisterEventHandler {
                 DarkslideSyncPayload.TYPE,
                 DarkslideSyncPayload.STREAM_CODEC);
     }
-    @SubscribeEvent
-    public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-        event.getBuilder().addRecipe(Ingredient.of(Items.POTION), Ingredient.of(Items.DYE.cyan()), new ItemStack(ModItems.CYAN_DEVELOPER.get()));
-        event.getBuilder().addRecipe(Ingredient.of(Items.POTION), Ingredient.of(Items.DYE.magenta()), new ItemStack(ModItems.MAGENTA_DEVELOPER.get()));
-        event.getBuilder().addRecipe(Ingredient.of(Items.POTION), Ingredient.of(Items.DYE.yellow()), new ItemStack(ModItems.YELLOW_DEVELOPER.get()));
-    }
 }

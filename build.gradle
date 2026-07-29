@@ -24,6 +24,7 @@ sourceSets.main.resources {
     // Exclude common development only resources from finalized outputs
     exclude("**/*.bbmodel") // BlockBench project files
     exclude("src/generated/**/.cache") // datagen cache files
+    exclude("**/*.pdn")
 }
 
 repositories {
@@ -152,10 +153,6 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
     expand replaceProperties
     from "src/main/templates"
     into "build/generated/sources/modMetadata"
-}
-
-tasks.named('processResources', ProcessResources) {
-    exclude '**/*.pdn'
 }
 
 // Include the output of "generateModMetadata" as an input directory for the build

@@ -39,7 +39,7 @@ public class ClientConfig {
             .comment("Whether should be darkslides available in the creative tab.")
             .translation("polaroid600.configuration.darkslidesInCreativeTab")
             .worldRestart()
-            .define("misc.darkslidesInCreativeTab", false);
+            .define("misc.darkslidesInCreativeTab", true);
     public static final ModConfigSpec.BooleanValue DARKSLIDES_IN_CREATIVE_MODE = BUILDER
             .comment("Whether cameras should eject darkslides when in creative mode.")
             .translation("polaroid600.configuration.darkslidesInCreativeMode")

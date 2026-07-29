@@ -7,8 +7,11 @@ import net.sophka.polaroid.Polaroid600;
 import net.sophka.polaroid.client.renderer.PhotoCache;
 import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
 import net.sophka.polaroid.data.darkslide.DarkslideManager;
+import net.sophka.polaroid.utils.Utils;
 import net.sophka.polaroid.world.entity.CameraViewEntity;
 import net.sophka.polaroid.world.item.FilmFormat;
+
+import java.io.IOException;
 
 public class ClientPayloadHandler {
     public static void handlePhotoData(final PhotoDataPayload data, final IPayloadContext context) {
@@ -18,8 +21,23 @@ public class ClientPayloadHandler {
         if(format == FilmFormat.MISSING){
             return;
         }
-        try(NativeImage scaled = data.toImage()){
+        try(NativeImage scaled = toImage(data)){
             PhotoCache.getInstance().save(format, data.id(), scaled);
+        }
+    }
+
+    private static NativeImage toImage(PhotoDataPayload payload){
+        try {
+            NativeImage scaled = new NativeImage(payload.format().width, payload.format().height, false);
+            int[] pixels = Utils.decompressInts(payload.data(), payload.format().width * payload.format().height);
+            for(int i = 0; i < payload.format().height; i++){
+                for(int j = 0; j < payload.format().width; j++){
+                    scaled.setPixel(j,i,pixels[i * payload.format().width + j]);
+                }
+            }
+            return scaled;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

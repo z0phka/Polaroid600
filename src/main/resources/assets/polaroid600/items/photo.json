@@ -4,44 +4,147 @@
     "cases": [
       {
         "model": {
-          "type": "minecraft:model",
-          "model": "polaroid600:item/photo_600_color"
+          "type": "minecraft:select",
+          "cases": [
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_1200_color"
+              },
+              "when": "color"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_1200_bw"
+              },
+              "when": "bw"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_1200_blue"
+              },
+              "when": "blue"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_1200_green"
+              },
+              "when": "green"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_1200_purple"
+              },
+              "when": "purple"
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "polaroid600:item/photo"
+          },
+          "property": "polaroid600:film_type"
         },
-        "when": "color"
+        "when": "1200"
       },
       {
         "model": {
-          "type": "minecraft:model",
-          "model": "polaroid600:item/photo_600_bw"
+          "type": "minecraft:select",
+          "cases": [
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_go_color"
+              },
+              "when": "color"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_go_bw"
+              },
+              "when": "bw"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_go_blue"
+              },
+              "when": "blue"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_go_green"
+              },
+              "when": "green"
+            },
+            {
+              "model": {
+                "type": "minecraft:model",
+                "model": "polaroid600:item/photo_go_purple"
+              },
+              "when": "purple"
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "polaroid600:item/photo"
+          },
+          "property": "polaroid600:film_type"
         },
-        "when": "bw"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "polaroid600:item/photo_600_blue"
-        },
-        "when": "blue"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "polaroid600:item/photo_600_green"
-        },
-        "when": "green"
-      },
-      {
-        "model": {
-          "type": "minecraft:model",
-          "model": "polaroid600:item/photo_600_purple"
-        },
-        "when": "purple"
+        "when": "go"
       }
     ],
     "fallback": {
-      "type": "minecraft:model",
-      "model": "polaroid600:item/photo"
+        "type": "minecraft:select",
+        "cases": [
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "polaroid600:item/photo_600_color"
+            },
+            "when": "color"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "polaroid600:item/photo_600_bw"
+            },
+            "when": "bw"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "polaroid600:item/photo_600_blue"
+            },
+            "when": "blue"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "polaroid600:item/photo_600_green"
+            },
+            "when": "green"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "polaroid600:item/photo_600_purple"
+            },
+            "when": "purple"
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "polaroid600:item/photo"
+        },
+        "property": "polaroid600:film_type"
+
     },
-    "property": "polaroid600:film_type"
+    "property": "polaroid600:film_format"
   }
 }

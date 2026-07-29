@@ -81,7 +81,7 @@ public class PhotoItem extends BlockItem {
                                     pos,
                                     oldResult.isInside());
 
-                            placedState.useItemOn(itemStack,level, player, placeContext.getHand(), blockHitResult);
+                            placedState.useItemOn(itemStack.copy(),level, player, placeContext.getHand(), blockHitResult);
                         }
                     }
 
