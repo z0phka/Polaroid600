@@ -125,6 +125,10 @@ public class PhotoBlock extends Block implements EntityBlock, SelectableSlotCont
                 if(player.isCrouching()){
                     return InteractionResult.PASS;
                 }
+                if(!(itemStack.isEmpty() || itemStack.getItem() instanceof PhotoItem)){
+                    return InteractionResult.PASS;
+                }
+
                 Inventory inventory = player.getInventory();
                 if (level.isClientSide()) {
                     return inventory.getSelectedItem().isEmpty() ? InteractionResult.PASS : InteractionResult.SUCCESS;

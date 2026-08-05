@@ -26,15 +26,6 @@ public class ModEventHandler {
     }
 
     @SubscribeEvent
-    public static void onInteractEntitySpecific(PlayerInteractEvent.EntityInteractSpecific event){
-        ItemStack stack = event.getEntity().getActiveItem();
-        if(stack.getItem() instanceof CameraItem && !CameraItem.permitInteraction(stack, event.getHand(), event.getTarget())){
-            event.setCancellationResult(InteractionResult.PASS);
-            event.setCanceled(true);
-        }
-    }
-
-    @SubscribeEvent
     public static void onInteractEntity(PlayerInteractEvent.EntityInteract event){
         ItemStack stack = event.getEntity().getActiveItem();
         if(stack.getItem() instanceof CameraItem && !CameraItem.permitInteraction(stack, event.getHand(), event.getTarget())){
