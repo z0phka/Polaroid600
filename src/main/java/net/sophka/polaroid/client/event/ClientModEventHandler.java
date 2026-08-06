@@ -1,17 +1,24 @@
 package net.sophka.polaroid.client.event;
 
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelTargetBundle;
+import net.minecraft.client.renderer.PostChain;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -27,6 +34,7 @@ import net.sophka.polaroid.client.gui.screens.PhotoScreen;
 import net.sophka.polaroid.client.init.ModKeyMappings;
 import net.sophka.polaroid.client.renderer.ClientPhotoTaker;
 import net.sophka.polaroid.client.renderer.PhotoCache;
+import net.sophka.polaroid.compatiblity.IrisHelper;
 import net.sophka.polaroid.data.darkslide.DarkslideManager;
 import net.sophka.polaroid.init.ModDataComponents;
 import net.sophka.polaroid.network.*;
@@ -115,7 +123,6 @@ public class ClientModEventHandler {
         if (ClientPhotoTaker.instance().getState() != ClientPhotoTaker.State.TAKING_PHOTO) {
             return;
         }
-        ClientPhotoTaker.instance().releaseRenderTarget();
     }
 
 
@@ -202,4 +209,26 @@ public class ClientModEventHandler {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onAfterLevel(RenderLevelStageEvent.AfterLevel event) {
+        RenderTarget main = Minecraft.getInstance().gameRenderer.mainRenderTarget();
+        ClientPhotoTaker photoTaker = ClientPhotoTaker.instance();
+        if(photoTaker.getState() != ClientPhotoTaker.State.TAKING_PHOTO){
+            return;
+        }
+
+        if(!ModList.get().isLoaded("iris") || !IrisHelper.isShaderPackInUse()) {
+            Identifier effect = photoTaker.getAutofocus() ? ClientPhotoTaker.dofAutofocusEffect : ClientPhotoTaker.dofEffect;
+
+            PostChain dof = Minecraft.getInstance()
+                    .getShaderManager()
+                    .getPostChain(effect, LevelTargetBundle.MAIN_TARGETS);
+
+            if (dof == null) {
+                return;
+            }
+            dof.process(main, GraphicsResourceAllocator.UNPOOLED);
+        }
+        ClientPhotoTaker.instance().releaseRenderTarget();
+    }
 }
